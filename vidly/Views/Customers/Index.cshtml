@@ -1,0 +1,33 @@
+﻿@model IEnumerable<vidly.Models.CustomerViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+   
+    
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Age</th>
+        <th>Address</th>
+    </tr>
+    @foreach (var customer in ViewBag.customers)
+    {
+        <tr>       
+            <td>@customer.Id</td>
+            <td>@customer.Name</td>
+            <td>@customer.Email</td>
+            <td>@customer.Age</td>
+            <td>@customer.Address</td>
+        </tr>
+    }
+</table>

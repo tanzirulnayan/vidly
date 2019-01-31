@@ -1,0 +1,61 @@
+﻿@model vidlyDbContext.Entities.Moderator
+
+@{
+	ViewBag.Title = "ModeratorProfile";
+	Layout = "~/Views/Shared/_LayoutModerator.cshtml";
+}
+
+<h2>Profile</h2>
+
+<div>
+	<h4>Moderator</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Password)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Password)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Email)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Email)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Address)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Address)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.UserType)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.UserType)
+		</dd>
+
+	</dl>
+</div>
+
+<div class="form-group">
+	<div class="col-md-offset-2 col-md-10">
+		<input type="button" value="Edit Profile" class="btn btn-default" onclick="location.href = '@Url.Action("EditProfile", "Moderators", new { id = Model.Id })'" />
+	</div>
+</div>

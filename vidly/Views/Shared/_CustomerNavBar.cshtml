@@ -1,0 +1,20 @@
+﻿
+@*@{
+    ViewBag.Title = "_CustomerNavBar";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<h2>_CustomerNavBar</h2>*@
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"></button>
+            @Html.ActionLink("Home", "Index", "Customers", null, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav"></ul>
+            @Html.Partial("_CustomerLoginPartial")
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+﻿@model vidly.Models.MovieViewModel
+
+@{
+    ViewBag.Title = "AddMovie";
+    Layout = "~/Views/Shared/_LayoutModerator.cshtml";
+}
+
+<h2>Add Movie</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Movie.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model=>model.Movie.Name,new{id="txtName"})
+                @Html.ValidationMessageFor(model => model.Movie.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Movie.Genre, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Movie.Genre, new { id = "txtGenre" })
+                @Html.ValidationMessageFor(model => model.Movie.Genre)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Movie.Year, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Movie.Year, new { id = "txtYear" })
+                @Html.ValidationMessageFor(model => model.Movie.Year)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" id="btnPost" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<script type = "text/javascript" > 
+$(function() {
+$("#btnPost").click(function() {
+console.log(1);
+var movies = new Object();
+        movies.Id = 0;
+        movies.Name = $('#txtName').val();
+        movies.Genre = $('#txtGenre').val();
+        movies.Year = $('#txtYear').val();
+        movies.BorrowCount = 0;
+
+        console.log(JSON.stringify(movies));
+
+
+        if (movies != null) {
+            $.ajax({
+                url: '@Url.Action("AddNewMovie", "Moderators")',
+                //dataType: "json",
+                //type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                async: true,
+                //data: { id: JSON.stringify(movies) },
+                data: movies,
+                success: function (response) {
+                    alert(response.message);
+                $('#error_message').html(response.message);
+                }
+                });
+        }
+    });
+});
+</script>
