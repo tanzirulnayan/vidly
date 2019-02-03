@@ -17,5 +17,6 @@ namespace vidlyDbContext
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Moderator> Moderators { get; set; }
+        public DbSet<BorrowHistory> BorrowHistories { get; set; }
     }
 }

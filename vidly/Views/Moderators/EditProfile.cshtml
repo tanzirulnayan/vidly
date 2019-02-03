@@ -15,7 +15,7 @@
         <h4>Moderator</h4>
         <hr />
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.Id, new { id = "txtId", Value = @ViewBag.moderator.Id })
+        @*@Html.HiddenFor(model => model.Id, new { id = "txtId", Value = @ViewBag.moderator.Id })*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })

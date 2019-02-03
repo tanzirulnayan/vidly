@@ -7,27 +7,21 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-   
-    
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Age</th>
-        <th>Address</th>
-    </tr>
-    @foreach (var customer in ViewBag.customers)
-    {
-        <tr>       
-            <td>@customer.Id</td>
-            <td>@customer.Name</td>
-            <td>@customer.Email</td>
-            <td>@customer.Age</td>
-            <td>@customer.Address</td>
-        </tr>
-    }
-</table>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="button" value="Browse Movies" class="btn btn-default" onclick="location.href = '@Url.Action("BrowseMovies", "Customers")'" />
+    </div>
+</div>
+
+@*<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="button" value="Current Borrows" class="btn btn-default" onclick="location.href = '@Url.Action("CurrentBorrows", "Customers")'" />
+    </div>
+</div>*@
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="button" value="Browse Movies" class="btn btn-default" onclick="location.href = '@Url.Action("AllBorrows", "Customers")'" />
+    </div>
+</div>

@@ -2,16 +2,13 @@
 
 @{
     ViewBag.Title = "BrowseMovies";
-    Layout = "~/Views/Shared/_LayoutModerator.cshtml";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
 }
 
 <h2>Browse Movies</h2>
 
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -30,9 +27,6 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
@@ -45,9 +39,8 @@
             @Html.DisplayFor(modelItem => item.BorrowCount)
         </td>
         <td>
-            @Html.ActionLink("Edit", "EditMovie", new { id=item.Id }) |
             @Html.ActionLink("Details", "MovieDetails", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "DeleteMovie", new { id=item.Id })
+            @Html.ActionLink("Borrow", "BorrowMovie", new { id=item.Id }) 
         </td>
     </tr>
 }

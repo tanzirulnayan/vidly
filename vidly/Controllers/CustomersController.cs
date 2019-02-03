@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using vidlyDbContext;
+using vidlyDbContext.Entities;
 using Customer = vidly.Models.CustomerViewModel;
 
 namespace vidly.Controllers
@@ -113,6 +114,40 @@ namespace vidly.Controllers
 			{
 				return RedirectToAction("EditProfile");
 			}
+		}
+
+		public ActionResult BrowseMovies()
+		{
+			var movies = context.Movies.ToList();
+			ViewBag.movies = movies;
+			return View(movies);
+		}
+
+		public ActionResult BorrowMovie(int id)
+		{
+			//borrow ops here using modal
+			vidlyDbContext.Entities.BorrowHistory borrow = new BorrowHistory();
+			borrow.MovieId = id;
+			borrow.CustomerId = 12;
+			borrow.BorrowDate = DateTime.Now;
+
+			context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
+			context.SaveChanges();
+
+
+			return RedirectToAction("BrowseMovies");
+		}
+
+		public ActionResult MovieDetails(int id)
+		{
+			var movie = context.Movies.FirstOrDefault(m => m.Id == id);
+			return View(movie);
+		}
+
+		public ActionResult AllBorrows()
+		{
+			//var borrows = context.BorrowHistories.ToList()
+			return View();
 		}
 	}
 }

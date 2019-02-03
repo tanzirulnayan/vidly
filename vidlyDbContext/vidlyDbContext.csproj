@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\BorrowHistory.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Migrations\201901240651331_CustomerModeratorMovieAdded.cs" />
     <Compile Include="Migrations\201901240651331_CustomerModeratorMovieAdded.Designer.cs">
@@ -54,6 +55,10 @@
     <Compile Include="Migrations\201901271003132_CustomerMovieModeratorUpdate.cs" />
     <Compile Include="Migrations\201901271003132_CustomerMovieModeratorUpdate.Designer.cs">
       <DependentUpon>201901271003132_CustomerMovieModeratorUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031132432_BorrowHistoryAdded.cs" />
+    <Compile Include="Migrations\201902031132432_BorrowHistoryAdded.Designer.cs">
+      <DependentUpon>201902031132432_BorrowHistoryAdded.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Moderator.cs" />
@@ -72,6 +77,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901271003132_CustomerMovieModeratorUpdate.resx">
       <DependentUpon>201901271003132_CustomerMovieModeratorUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031132432_BorrowHistoryAdded.resx">
+      <DependentUpon>201902031132432_BorrowHistoryAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

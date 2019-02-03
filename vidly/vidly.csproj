@@ -259,6 +259,8 @@
     <Content Include="Views\Moderators\EditCustomer.cshtml" />
     <Content Include="Views\Moderators\CustomerDetails.cshtml" />
     <Content Include="Views\Moderators\ModeratorProfile.cshtml" />
+    <Content Include="Views\Customers\BrowseMovies.cshtml" />
+    <Content Include="Views\Customers\MovieDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

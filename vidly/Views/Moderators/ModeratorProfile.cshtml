@@ -11,6 +11,15 @@
 	<h4>Moderator</h4>
 	<hr />
 	<dl class="dl-horizontal">
+		
+		<dt>
+			@Html.DisplayNameFor(model => model.Id)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Id)
+		</dd>
+
 		<dt>
 			@Html.DisplayNameFor(model => model.Name)
 
@@ -18,14 +27,6 @@
 
 		<dd>
 			@Html.DisplayFor(model => model.Name)
-		</dd>
-
-		<dt>
-			@Html.DisplayNameFor(model => model.Password)
-		</dt>
-
-		<dd>
-			@Html.DisplayFor(model => model.Password)
 		</dd>
 
 		<dt>
