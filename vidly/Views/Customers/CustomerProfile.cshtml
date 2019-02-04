@@ -16,22 +16,31 @@
 		</dt>
 
 		<dd>
-			@ViewBag.customers.Id
+			@Html.DisplayFor(model => model.Id)
 		</dd>
+
 		<dt>
 			@Html.DisplayNameFor(model => model.Name)
 		</dt>
 
 		<dd>
-			@ViewBag.customers.Name
+			@Html.DisplayFor(model => model.Name)
 		</dd>
-
+		
 		<dt>
 			@Html.DisplayNameFor(model => model.Age)
 		</dt>
 
 		<dd>
-		   @ViewBag.customers.Age
+			@Html.DisplayFor(model => model.Age)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Password)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Password)
 		</dd>
 
 		<dt>
@@ -39,7 +48,7 @@
 		</dt>
 
 		<dd>
-			@ViewBag.customers.Email
+			@Html.DisplayFor(model => model.Email)
 		</dd>
 
 		<dt>
@@ -47,12 +56,21 @@
 		</dt>
 
 		<dd>
-			@ViewBag.customers.Address
+			@Html.DisplayFor(model => model.Address)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.UserType)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.UserType)
 		</dd>
 
 	</dl>
 </div>
-@*<p>
-	@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-	@Html.ActionLink("Back to List", "Index")
-</p>*@
+<div class="form-group">
+	<div class="col-md-offset-2 col-md-10">
+		<input type="button" value="Edit Profile" class="btn btn-default" onclick="location.href = '@Url.Action("EditProfile", "Customers", new { id = Model.Id })'" />
+	</div>
+</div>

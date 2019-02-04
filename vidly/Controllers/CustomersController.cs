@@ -4,12 +4,14 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 using vidlyDbContext;
 using vidlyDbContext.Entities;
-using Customer = vidly.Models.CustomerViewModel;
+//using Customer = vidly.Models.CustomerViewModel;
 
 namespace vidly.Controllers
 {
+	[SessionState(SessionStateBehavior.Required)]
 	public class CustomersController : Controller
 	{
 		//
@@ -19,8 +21,6 @@ namespace vidly.Controllers
 
 		public ActionResult Index()
 		{
-			var customers = context.Customers.ToList();
-			ViewBag.customers = customers;
 			return View();
 		}
 
@@ -47,9 +47,11 @@ namespace vidly.Controllers
 			var flag = false;
 			try
 			{
-				if (customer.Id == 0)
-					customer.UserType = "customer";
-
+				//if (customer.Id == 0)
+				//{
+				//    customer.UserType = "customer";
+				//}
+				customer.UserType = "customer";
 				context.Customers.AddOrUpdate(m => m.Id, customer);
 				context.SaveChanges();
 				flag = true;
@@ -64,7 +66,8 @@ namespace vidly.Controllers
 		public ActionResult CustomerProfile()
 		{
 
-			var customer = context.Customers.FirstOrDefault(a => a.Id == 12);
+			var sessionId = (int)Session["UserId"];
+			var customer = context.Customers.FirstOrDefault(a => a.Id == sessionId);
 
 			//var customer = context.Customers.Where(a => a.Id ==6).Select(p => new {p.Id, p.Name});;
 
@@ -78,8 +81,8 @@ namespace vidly.Controllers
 
 
 			//objDataContext.employees.Find(empId);
-			ViewBag.customers = customer;
-			return View();
+			//ViewBag.customers = customer;
+			return View(customer);
 		}
 
 
@@ -91,8 +94,8 @@ namespace vidly.Controllers
 
 		public ActionResult EditProfile()
 		{
-			//using object
-			var customer = context.Customers.FirstOrDefault(a => a.Id == 6);
+			var sessionId = (int)Session["UserId"];
+			var customer = context.Customers.FirstOrDefault(a => a.Id == sessionId);
 			
 			return View(customer);
 		}
@@ -127,8 +130,10 @@ namespace vidly.Controllers
 		{
 			//borrow ops here using modal
 			vidlyDbContext.Entities.BorrowHistory borrow = new BorrowHistory();
+			var sessionId = (int) Session["UserId"];
+			borrow.Id = Guid.NewGuid();
 			borrow.MovieId = id;
-			borrow.CustomerId = 12;
+			borrow.CustomerId = sessionId;
 			borrow.BorrowDate = DateTime.Now;
 
 			context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
@@ -148,6 +153,12 @@ namespace vidly.Controllers
 		{
 			//var borrows = context.BorrowHistories.ToList()
 			return View();
+		}
+
+		public ActionResult LogOutCustomer()
+		{
+			Session.Abandon();
+			return RedirectToAction("../Home/Login");
 		}
 	}
 }

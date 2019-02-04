@@ -12,6 +12,8 @@
 
     <div class="form-horizontal">
         <h4>Moderator</h4>
+        
+        <h2>Welcome @Session["UserName"]</h2>
         <hr />
         @Html.ValidationSummary(true)
         @*@Html.HiddenFor(model => model.Id, new { id = "txtId", Value = @ViewBag.moderator.Id })*@

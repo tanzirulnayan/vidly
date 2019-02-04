@@ -234,12 +234,10 @@
     <Content Include="Views\Movies\Create.cshtml" />
     <Content Include="Views\Customers\Create.cshtml" />
     <Content Include="Views\Moderators\Create.cshtml" />
-    <Content Include="Views\Customers\CustomerProfile.cshtml" />
     <Content Include="Views\Movies\AllMovies.cshtml" />
     <Content Include="Views\Movies\MovieList.cshtml" />
     <Content Include="Views\Moderators\AddMovie.cshtml" />
     <Content Include="Views\Moderators\EditProfile.cshtml" />
-    <Content Include="Views\Customers\EditProfile.cshtml" />
     <Content Include="Views\Shared\_ModeratorNavBar.cshtml" />
     <Content Include="Views\Moderators\Index.cshtml" />
     <Content Include="Views\Shared\_ModeratorLoginPartial.cshtml" />
@@ -261,6 +259,8 @@
     <Content Include="Views\Moderators\ModeratorProfile.cshtml" />
     <Content Include="Views\Customers\BrowseMovies.cshtml" />
     <Content Include="Views\Customers\MovieDetails.cshtml" />
+    <Content Include="Views\Customers\CustomerProfile.cshtml" />
+    <Content Include="Views\Customers\EditProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

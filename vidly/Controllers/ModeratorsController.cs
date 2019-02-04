@@ -4,6 +4,7 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 using System.Web.UI;
 using vidly.Models;
 using vidlyDbContext;
@@ -12,6 +13,7 @@ using vidlyDbContext.Entities;
 
 namespace vidly.Controllers
 {
+    [SessionState(SessionStateBehavior.Required)]
     public class ModeratorsController : Controller
     {
         //
@@ -32,11 +34,11 @@ namespace vidly.Controllers
             var flag = false;
             try
             {
-                if (moderator.Id == 0)
-                {
-                    moderator.UserType = "moderator";
-                }
-
+                //if (moderator.Id == 0)
+                //{
+                //    moderator.UserType = "moderator";
+                //}
+                moderator.UserType = "moderator";
                 context.Moderators.AddOrUpdate(m => m.Id, moderator);
                 context.SaveChanges();
                 flag = true;
@@ -111,7 +113,8 @@ namespace vidly.Controllers
 
         public ActionResult ModeratorProfile()
         {
-            var moderator = context.Moderators.FirstOrDefault(a => a.Id == 1);
+            var sessionId = (int)Session["UserId"];
+            var moderator = context.Moderators.FirstOrDefault(a => a.Id == sessionId);
             ViewBag.moderator = moderator;
 
             return View(moderator);
@@ -170,7 +173,8 @@ namespace vidly.Controllers
         public ActionResult EditProfile()
         {
             //using viewbag
-            var moderator = context.Moderators.FirstOrDefault(a => a.Id == 1);
+            var sessionId = (int)Session["UserId"];
+            var moderator = context.Moderators.FirstOrDefault(a => a.Id == sessionId);
             ViewBag.moderator = moderator;
             return View();
         }
@@ -304,5 +308,10 @@ namespace vidly.Controllers
             return View(customer);
         }
 
+        public ActionResult LogOutModerator()
+        {
+            Session.Abandon();
+            return RedirectToAction("../Home/Login");
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 using System.Web.UI.WebControls;
 using vidlyDbContext;
 using System.Data.Entity.Migrations;
@@ -10,6 +11,7 @@ using System.Data.Entity.Migrations;
 
 namespace vidly.Controllers
 {
+    [SessionState(SessionStateBehavior.Default)]
     public class HomeController : Controller
     {
         VidlyDbContext context = new VidlyDbContext();
@@ -129,6 +131,8 @@ namespace vidly.Controllers
                     var customer = context.Customers.First(a => a.Id == login.Id);
                     if (login.Id == customer.Id && login.Password == customer.Password)
                     {
+                        Session["UserId"] = customer.Id;
+                        Session["UserName"] = customer.Name;
                         redirectString = "../Customers/Index";
                     }
                 }
@@ -144,6 +148,8 @@ namespace vidly.Controllers
                     var moderator = context.Moderators.First(a => a.Id == login.Id);
                     if (login.Id == moderator.Id && login.Password == moderator.Password)
                     {
+                        Session["UserId"] = moderator.Id;
+                        Session["UserName"] = moderator.Name;
                         redirectString = "../Moderators/Index";
                     }
                 }
