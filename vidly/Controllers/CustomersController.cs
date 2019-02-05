@@ -166,21 +166,22 @@ namespace vidly.Controllers
 
 		public ActionResult AllBorrows()
 		{
-			var sessionId = (int)Session["UserId"];
+			int sessionId = GetSessionId();
 			//var borrows = context.BorrowHistories.ToList();
 
-
 			//need to create a list
-			var borrows = from bh in context.BorrowHistories
-				join m in context.Movies on bh.MovieId equals m.Id
-				where bh.CustomerId == GetSessionId()
-				select new
-				{
-					m.Name,
-					bh.BorrowDate,
-					bh.ReturnDate,
-					bh.BorrowStatus
-				};
+			var borrows = (from bh in context.BorrowHistories
+						   join m in context.Movies on bh.MovieId equals m.Id
+						   where bh.CustomerId == sessionId
+						   orderby bh.BorrowDate descending
+						   select new
+						   {
+							   MovieName = m.Name,
+							   DateOfBorrow = bh.BorrowDate,
+							   ReturnDateOfBorrow = bh.ReturnDate,
+							   StatusOfBorrow = bh.BorrowStatus
+						   }).ToList();
+			ViewBag.borrows = borrows;
 			return View();
 		}
 

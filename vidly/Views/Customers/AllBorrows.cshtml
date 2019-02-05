@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "AllBorrows";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<h2>All Borrows</h2>
+<table class="table">
+    <tr>
+        <th>Movie Name</th>
+        <th>Borrow Date</th>
+        <th>Return Date</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var movie in ViewBag.borrows)
+    {
+        <tr>
+            <td>@movie.MovieName</td>
+            <td>@movie.DateOfBorrow</td>
+            <td>@movie.ReturnDateOfBorrow</td>
+            <td>@movie.StatusOfBorrow</td>
+        </tr>
+    }
+</table>
+
