@@ -12,5 +12,7 @@ namespace vidlyDbContext.Entities
         public int MovieId { get; set; }
         public int CustomerId { get; set; }
         public DateTime BorrowDate { get; set; }
+        public DateTime ReturnDate { get; set; }
+        public string BorrowStatus { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
+using Microsoft.Ajax.Utilities;
 using vidlyDbContext;
 using vidlyDbContext.Entities;
 //using Customer = vidly.Models.CustomerViewModel;
@@ -42,6 +43,11 @@ namespace vidly.Controllers
 			}
 		}
 
+		public int GetSessionId()
+		{
+			return (int)Session["UserId"];
+		}
+
 		public bool AddOrUpdateCustomer(vidlyDbContext.Entities.Customer customer)
 		{
 			var flag = false;
@@ -66,9 +72,11 @@ namespace vidly.Controllers
 		public ActionResult CustomerProfile()
 		{
 
-			var sessionId = (int)Session["UserId"];
-			var customer = context.Customers.FirstOrDefault(a => a.Id == sessionId);
+			//var sessionId = (int)Session["UserId"];
+			var customer = context.Customers.FirstOrDefault(a => a.Id == GetSessionId());
 
+			//var test = context.Customers.Include("Movies").Where(x => x.Id == 12).SelectMany()
+		   
 			//var customer = context.Customers.Where(a => a.Id ==6).Select(p => new {p.Id, p.Name});;
 
 			//var banani = (from x in context.Customers
@@ -94,8 +102,8 @@ namespace vidly.Controllers
 
 		public ActionResult EditProfile()
 		{
-			var sessionId = (int)Session["UserId"];
-			var customer = context.Customers.FirstOrDefault(a => a.Id == sessionId);
+			//var sessionId = (int)Session["UserId"];
+			var customer = context.Customers.FirstOrDefault(a => a.Id == GetSessionId());
 			
 			return View(customer);
 		}
@@ -130,15 +138,22 @@ namespace vidly.Controllers
 		{
 			//borrow ops here using modal
 			vidlyDbContext.Entities.BorrowHistory borrow = new BorrowHistory();
-			var sessionId = (int) Session["UserId"];
+			//var sessionId = (int) Session["UserId"];
 			borrow.Id = Guid.NewGuid();
 			borrow.MovieId = id;
-			borrow.CustomerId = sessionId;
-			borrow.BorrowDate = DateTime.Now;
+			borrow.CustomerId = GetSessionId();
+			borrow.BorrowDate = DateTime.Today;
+			borrow.ReturnDate = DateTime.Today.AddDays(7);
+			borrow.BorrowStatus = "pending";
 
 			context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
 			context.SaveChanges();
 
+			var movie = context.Movies.FirstOrDefault(m => m.Id == id);
+			movie.BorrowCount ++;
+
+			context.Movies.AddOrUpdate(m => m.Id, movie);
+			context.SaveChanges();
 
 			return RedirectToAction("BrowseMovies");
 		}
@@ -151,9 +166,31 @@ namespace vidly.Controllers
 
 		public ActionResult AllBorrows()
 		{
-			//var borrows = context.BorrowHistories.ToList()
+			var sessionId = (int)Session["UserId"];
+			//var borrows = context.BorrowHistories.ToList();
+
+
+			//need to create a list
+			var borrows = from bh in context.BorrowHistories
+				join m in context.Movies on bh.MovieId equals m.Id
+				where bh.CustomerId == GetSessionId()
+				select new
+				{
+					m.Name,
+					bh.BorrowDate,
+					bh.ReturnDate,
+					bh.BorrowStatus
+				};
 			return View();
 		}
+
+		public ActionResult CurrentBorrows()
+		{
+			var sessionId = (int)Session["UserId"];
+			//var borrows = context.BorrowHistories.ToList();
+			return View();
+		}
+
 
 		public ActionResult LogOutCustomer()
 		{

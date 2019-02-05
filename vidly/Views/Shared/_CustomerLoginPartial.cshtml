@@ -16,7 +16,9 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("All Movies", "BrowseMovies", "Customers", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Browse Movies", "BrowseMovies", "Customers", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Current Borrows", "CurrentBorrows", "Customers", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Borrow History", "AllBorrows", "Customers", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         <li>@Html.ActionLink("Profile", "CustomerProfile", "Customers", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         <li>@Html.ActionLink("Log Out", "LogOutCustomer", "Customers", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>

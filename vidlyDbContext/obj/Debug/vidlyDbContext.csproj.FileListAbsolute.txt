@@ -11,3 +11,5 @@ E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.csproj.GenerateResou
 E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.dll
 E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.pdb
 E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.Migrations.BorrowHistoryAdded.resources
+E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.csprojResolveAssemblyReference.cache
+E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.Migrations.ReturnDate_BorrowStatus_Added_In_BorrowHistory.resources
