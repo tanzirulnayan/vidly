@@ -16,13 +16,19 @@ namespace vidly.Controllers
     [SessionState(SessionStateBehavior.Required)]
     public class ModeratorsController : Controller
     {
-        //
         // GET: /Moderators/
         VidlyDbContext context = new VidlyDbContext();
-
+        private string logInUrl = "../Home/Index";
         public ActionResult Index()
         {
-            return View();
+            if (GetSessionId() != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
         public ActionResult Create()
         {
@@ -34,10 +40,6 @@ namespace vidly.Controllers
             var flag = false;
             try
             {
-                //if (moderator.Id == 0)
-                //{
-                //    moderator.UserType = "moderator";
-                //}
                 moderator.UserType = "moderator";
                 context.Moderators.AddOrUpdate(m => m.Id, moderator);
                 context.SaveChanges();
@@ -65,7 +67,6 @@ namespace vidly.Controllers
             }
             catch (Exception exception)
             {
-
                 flag = false;
             }
             return flag;
@@ -93,59 +94,82 @@ namespace vidly.Controllers
             return flag;
         }
 
+        public int GetSessionId()
+        {
+            return (int)Session["UserId"];
+        }
+
         [HttpPost]
         public ActionResult Create(vidlyDbContext.Entities.Moderator moderator)
         {
-            //moderator.UserType = "moderator";
-            //context.Moderators.Add(moderator);
-            //context.SaveChanges();
-            //return RedirectToAction("../Home/Index");
-
-            if (AddOrUpdateModerator(moderator))
+            if (GetSessionId() != 0)
             {
-                return RedirectToAction("../Home/Index");
+                if (AddOrUpdateModerator(moderator))
+                {
+                    return RedirectToAction(logInUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Create");
+                }
             }
             else
             {
-                return RedirectToAction("Create");
+                return RedirectToAction(logInUrl);
             }
         }
 
         public ActionResult ModeratorProfile()
         {
-            var sessionId = (int)Session["UserId"];
-            var moderator = context.Moderators.FirstOrDefault(a => a.Id == sessionId);
-            ViewBag.moderator = moderator;
+            if (GetSessionId() != 0)
+            {
+                var sessionId = GetSessionId();
+                var moderator = context.Moderators.FirstOrDefault(a => a.Id == sessionId);
+                ViewBag.moderator = moderator;
 
-            return View(moderator);
+                return View(moderator);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
 
         public ActionResult AddMovie()
         {
-            return View();
+            if (GetSessionId() != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
-
-        
 
         [HttpGet]
         public ActionResult AddNewMovie(Movie data)
         {
-            var res = "";
-            //var movie = JsonConvert.DeserializeObject<Movie>(id);
-
-
-            try
+            if (GetSessionId() != 0)
             {
-                context.Movies.Add(data);
-                context.SaveChanges();
-                res = "Movie added";
+                var res = "";
+                //var movie = JsonConvert.DeserializeObject<Movie>(id);
+                try
+                {
+                    context.Movies.Add(data);
+                    context.SaveChanges();
+                    res = "Movie added";
+                }
+                catch (Exception e)
+                {
+                    res = "Something went wrong";
+                }
+                return Json(new { message = res }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception e)
+            else
             {
-                res = "Something went wrong";
+                return RedirectToAction(logInUrl);
             }
-            return Json(new { message = res }, JsonRequestBehavior.AllowGet);
-
         }
 
         //public ActionResult EditMovie()
@@ -172,11 +196,18 @@ namespace vidly.Controllers
 
         public ActionResult EditProfile()
         {
-            //using viewbag
-            var sessionId = (int)Session["UserId"];
-            var moderator = context.Moderators.FirstOrDefault(a => a.Id == sessionId);
-            ViewBag.moderator = moderator;
-            return View();
+            if (GetSessionId() != 0)
+            {
+                //using viewbag
+                var sessionId = GetSessionId();
+                var moderator = context.Moderators.FirstOrDefault(a => a.Id == sessionId);
+                ViewBag.moderator = moderator;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
 
         [HttpPost]
@@ -195,123 +226,226 @@ namespace vidly.Controllers
             //}
 
             //return RedirectToAction("ModeratorProfile");
-            if (AddOrUpdateModerator(moderator))
+
+            if (GetSessionId() != 0)
             {
-                return RedirectToAction("ModeratorProfile");
+                if (AddOrUpdateModerator(moderator))
+                {
+                    return RedirectToAction("ModeratorProfile");
+                }
+                else
+                {
+                    return RedirectToAction("EditProfile");
+                }
             }
             else
             {
-                return RedirectToAction("EditProfile");
+                return RedirectToAction(logInUrl);
             }
+            
 
         }
 
         public ActionResult BrowseMovies()
         {
-            var movies = context.Movies.ToList();
-            ViewBag.movies = movies;
-            return View(movies);
+            if (GetSessionId() != 0)
+            {
+                var movies = context.Movies.ToList();
+                ViewBag.movies = movies;
+                return View(movies);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
 
         public ActionResult BrowseCustomers()
         {
-            var customers = context.Customers.ToList();
-            return View(customers);
+            if (GetSessionId() != 0)
+            {
+                var customers = context.Customers.ToList();
+                return View(customers);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+            
         }
 
         public ActionResult MovieDetails(int id)
         {
-            var movie = context.Movies.FirstOrDefault(a => a.Id == id);
-            return View(movie);
+            if (GetSessionId() != 0)
+            {
+                var movie = context.Movies.FirstOrDefault(a => a.Id == id);
+                return View(movie);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+            
         }
         public ActionResult EditMovie(int id)
         {
-            var movie = context.Movies.FirstOrDefault(a => a.Id == id);
-            return View(movie);
+            if (GetSessionId() != 0)
+            {
+                var movie = context.Movies.FirstOrDefault(a => a.Id == id);
+                return View(movie);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+            
         }
 
         [HttpPost]
         public ActionResult EditMovie(vidlyDbContext.Entities.Movie movie)
         {
-            AddOrUpdateMovie(movie);
-            return View(movie);
+            if (GetSessionId() != 0)
+            {
+                AddOrUpdateMovie(movie);
+                return View(movie);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+            
         }
 
         public ActionResult DeleteMovie(int id)
         {
-            var movie = context.Movies.FirstOrDefault(a => a.Id == id);
-            return View(movie);
+            if (GetSessionId() != 0)
+            {
+                var movie = context.Movies.FirstOrDefault(a => a.Id == id);
+                return View(movie);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+            
         }
 
         [HttpPost]
         public ActionResult DeleteMovie(vidlyDbContext.Entities.Movie movie)
         {
-            var movieFromDb = context.Movies.FirstOrDefault(x => x.Id == movie.Id);
-
-            if (movieFromDb != null)
+            if (GetSessionId() != 0)
             {
-                context.Movies.Remove(movieFromDb);
-                context.SaveChanges();
-                return RedirectToAction("BrowseMovies");
+                var movieFromDb = context.Movies.FirstOrDefault(x => x.Id == movie.Id);
+
+                if (movieFromDb != null)
+                {
+                    context.Movies.Remove(movieFromDb);
+                    context.SaveChanges();
+                    return RedirectToAction("BrowseMovies");
+                }
+                else
+                {
+                    return View();
+                }
             }
             else
             {
-                return View();
+                return RedirectToAction(logInUrl);
             }
+
+            
         }
 
         public ActionResult EditCustomer(int id)
         {
-            var customer = context.Customers.FirstOrDefault(a => a.Id == id);
-            return View(customer);
+            if (GetSessionId() != 0)
+            {
+                var customer = context.Customers.FirstOrDefault(a => a.Id == id);
+                return View(customer);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
 
         [HttpPost]
         public ActionResult EditCustomer(vidlyDbContext.Entities.Customer customer)
         {
-            if (AddOrUpdateCustomer(customer))
+            if (GetSessionId() != 0)
             {
-                return RedirectToAction("BrowseCustomers");
+                if (AddOrUpdateCustomer(customer))
+                {
+                    return RedirectToAction("BrowseCustomers");
+                }
+                else
+                {
+                    return View(customer);
+                }
             }
             else
             {
-                return View(customer);
+                return RedirectToAction(logInUrl);
             }
-            
         }
 
         public ActionResult CustomerDetails(int id)
         {
-            var customer = context.Customers.FirstOrDefault(a => a.Id == id);
-            return View(customer);
+            if (GetSessionId() != 0)
+            {
+                var customer = context.Customers.FirstOrDefault(a => a.Id == id);
+                return View(customer);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+            
         }
 
         [HttpPost]
         public ActionResult DeleteCustomer(vidlyDbContext.Entities.Customer customer)
         {
-            var customerFromDb = context.Customers.FirstOrDefault(x => x.Id == customer.Id);
-
-            if (customerFromDb != null)
+            if (GetSessionId() != 0)
             {
-                context.Customers.Remove(customerFromDb);
-                context.SaveChanges();
-                return RedirectToAction("BrowseCustomers");
+                var customerFromDb = context.Customers.FirstOrDefault(x => x.Id == customer.Id);
+
+                if (customerFromDb != null)
+                {
+                    context.Customers.Remove(customerFromDb);
+                    context.SaveChanges();
+                    return RedirectToAction("BrowseCustomers");
+                }
+                else
+                {
+                    return View();
+                }
             }
             else
             {
-                return View();
-            }
+                return RedirectToAction(logInUrl);
+            } 
         }
         public ActionResult DeleteCustomer(int id)
         {
-            var customer = context.Customers.FirstOrDefault(a => a.Id == id);
-            return View(customer);
+            if (GetSessionId() != 0)
+            {
+                var customer = context.Customers.FirstOrDefault(a => a.Id == id);
+                return View(customer);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
 
         public ActionResult LogOutModerator()
         {
-            Session.Abandon();
-            return RedirectToAction("../Home/Login");
+            if (GetSessionId() != 0)
+            {
+                Session.Abandon();
+            }
+            return RedirectToAction(logInUrl);
         }
     }
 }

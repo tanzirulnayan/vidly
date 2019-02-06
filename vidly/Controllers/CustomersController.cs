@@ -15,14 +15,20 @@ namespace vidly.Controllers
 	[SessionState(SessionStateBehavior.Required)]
 	public class CustomersController : Controller
 	{
-		//
 		// GET: /Customers/
 
 		VidlyDbContext context = new VidlyDbContext();
-
+		private string logInUrl = "../Home/Index";
 		public ActionResult Index()
 		{
-			return View();
+			if (GetSessionId() != 0)
+			{
+				return View();
+			}
+			else
+			{
+				return RedirectToAction(logInUrl);
+			}
 		}
 
 		public ActionResult Create()
@@ -71,132 +77,176 @@ namespace vidly.Controllers
 
 		public ActionResult CustomerProfile()
 		{
+			if (GetSessionId() != 0)
+			{
+				var sessionId = GetSessionId();
+				var customer = context.Customers.FirstOrDefault(a => a.Id == sessionId);
 
-			//var sessionId = (int)Session["UserId"];
-			var customer = context.Customers.FirstOrDefault(a => a.Id == GetSessionId());
+				//var test = context.Customers.Include("Movies").Where(x => x.Id == 12).SelectMany()
 
-			//var test = context.Customers.Include("Movies").Where(x => x.Id == 12).SelectMany()
-		   
-			//var customer = context.Customers.Where(a => a.Id ==6).Select(p => new {p.Id, p.Name});;
+				//var customer = context.Customers.Where(a => a.Id ==6).Select(p => new {p.Id, p.Name});;
 
-			//var banani = (from x in context.Customers
-			//              where x.Address == "Banani" || x.Address == "Gulshan"
-			//              select new
-			//              {
-			//                  Name = x.Name,
-			//                  Password = x.Password
-			//              }).ToList();
+				//var banani = (from x in context.Customers
+				//              where x.Address == "Banani" || x.Address == "Gulshan"
+				//              select new
+				//              {
+				//                  Name = x.Name,
+				//                  Password = x.Password
+				//              }).ToList();
 
 
-			//objDataContext.employees.Find(empId);
-			//ViewBag.customers = customer;
-			return View(customer);
+				//objDataContext.employees.Find(empId);
+				//ViewBag.customers = customer;
+				return View(customer);
+			}
+			else
+			{
+				return RedirectToAction(logInUrl);
+			}
+			
 		}
-
-
-		//[HttpPost]
-		//public ActionResult Create1(string MMM)
-		//{
-		//    return RedirectToAction("Index");
-		//}
 
 		public ActionResult EditProfile()
 		{
-			//var sessionId = (int)Session["UserId"];
-			var customer = context.Customers.FirstOrDefault(a => a.Id == GetSessionId());
-			
-			return View(customer);
+			if (GetSessionId() != 0)
+			{
+				var sessionId = GetSessionId();
+				var customer = context.Customers.FirstOrDefault(a => a.Id == sessionId);
+
+				return View(customer);
+			}
+			else
+			{
+				return RedirectToAction(logInUrl);
+			}
 		}
 
 		[HttpPost]
 		public ActionResult EditProfile(vidlyDbContext.Entities.Customer customer)
 		{
-			//if (customer.Id != 0)
-			//{
-			//    context.Customers.AddOrUpdate(m => m.Id, customer);
-			//    context.SaveChanges();
-			//}
-
-			if (AddOrUpdateCustomer(customer))
+			if (GetSessionId() != 0)
 			{
-				return RedirectToAction("CustomerProfile");
+				if (AddOrUpdateCustomer(customer))
+				{
+					return RedirectToAction("CustomerProfile");
+				}
+				else
+				{
+					return RedirectToAction("EditProfile");
+				}
 			}
 			else
 			{
-				return RedirectToAction("EditProfile");
+				return RedirectToAction(logInUrl);
 			}
+			
 		}
 
 		public ActionResult BrowseMovies()
 		{
-			var movies = context.Movies.ToList();
-			ViewBag.movies = movies;
-			return View(movies);
+			if (GetSessionId() != 0)
+			{
+				var movies = context.Movies.ToList();
+				ViewBag.movies = movies;
+				return View(movies);
+			}
+			else
+			{
+				return RedirectToAction(logInUrl);
+			}
 		}
 
 		public ActionResult BorrowMovie(int id)
 		{
-			//borrow ops here using modal
-			vidlyDbContext.Entities.BorrowHistory borrow = new BorrowHistory();
-			//var sessionId = (int) Session["UserId"];
-			borrow.Id = Guid.NewGuid();
-			borrow.MovieId = id;
-			borrow.CustomerId = GetSessionId();
-			borrow.BorrowDate = DateTime.Today;
-			borrow.ReturnDate = DateTime.Today.AddDays(7);
-			borrow.BorrowStatus = "pending";
+			if (GetSessionId() != 0)
+			{
+				//borrow ops here using modal
+				vidlyDbContext.Entities.BorrowHistory borrow = new BorrowHistory();
+				//var sessionId = (int) Session["UserId"];
+				borrow.Id = Guid.NewGuid();
+				borrow.MovieId = id;
+				borrow.CustomerId = GetSessionId();
+				borrow.BorrowDate = DateTime.Today;
+				borrow.ReturnDate = DateTime.Today.AddDays(7);
+				borrow.BorrowStatus = "pending";
 
-			context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
-			context.SaveChanges();
+				context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
+				context.SaveChanges();
 
-			var movie = context.Movies.FirstOrDefault(m => m.Id == id);
-			movie.BorrowCount ++;
+				var movie = context.Movies.FirstOrDefault(m => m.Id == id);
+				movie.BorrowCount++;
 
-			context.Movies.AddOrUpdate(m => m.Id, movie);
-			context.SaveChanges();
+				context.Movies.AddOrUpdate(m => m.Id, movie);
+				context.SaveChanges();
 
-			return RedirectToAction("BrowseMovies");
+				return RedirectToAction("BrowseMovies");
+			}
+			else
+			{
+				return RedirectToAction(logInUrl);
+			}
 		}
 
 		public ActionResult MovieDetails(int id)
 		{
-			var movie = context.Movies.FirstOrDefault(m => m.Id == id);
-			return View(movie);
+			if (GetSessionId() != 0)
+			{
+				var movie = context.Movies.FirstOrDefault(m => m.Id == id);
+				return View(movie);
+			}
+			else
+			{
+				return RedirectToAction(logInUrl);
+			}
 		}
 
 		public ActionResult AllBorrows()
 		{
-			int sessionId = GetSessionId();
-			//var borrows = context.BorrowHistories.ToList();
+			if (GetSessionId() != 0)
+			{
+				var sessionId = GetSessionId();
 
-			//need to create a list
-			var borrows = (from bh in context.BorrowHistories
-						   join m in context.Movies on bh.MovieId equals m.Id
-						   where bh.CustomerId == sessionId
-						   orderby bh.BorrowDate descending
-						   select new
-						   {
-							   MovieName = m.Name,
-							   DateOfBorrow = bh.BorrowDate,
-							   ReturnDateOfBorrow = bh.ReturnDate,
-							   StatusOfBorrow = bh.BorrowStatus
-						   }).ToList();
-			ViewBag.borrows = borrows;
-			return View();
+				var borrows = (from bh in context.BorrowHistories
+							   join m in context.Movies on bh.MovieId equals m.Id
+							   where bh.CustomerId == sessionId
+							   orderby bh.BorrowDate descending
+							   select new
+							   {
+								   MovieName = m.Name,
+								   DateOfBorrow = bh.BorrowDate,
+								   ReturnDateOfBorrow = bh.ReturnDate,
+								   StatusOfBorrow = bh.BorrowStatus
+							   }).ToList();
+				ViewBag.allBorrows = borrows;
+				return View();
+			}
+			else
+			{
+				return RedirectToAction(logInUrl);
+			}
 		}
 
 		public ActionResult CurrentBorrows()
 		{
-			var sessionId = (int)Session["UserId"];
-			//var borrows = context.BorrowHistories.ToList();
-			return View();
+			if (GetSessionId() != 0)
+			{
+			    var sessionId = GetSessionId();
+				//current borrow ops to be implemented here
+				return View();
+			}
+			else
+			{
+				return RedirectToAction(logInUrl);
+			}
 		}
-
 
 		public ActionResult LogOutCustomer()
 		{
-			Session.Abandon();
-			return RedirectToAction("../Home/Login");
+			if (GetSessionId() != 0)
+			{
+				Session.Abandon();
+			}
+			return RedirectToAction(logInUrl);
 		}
 	}
 }
