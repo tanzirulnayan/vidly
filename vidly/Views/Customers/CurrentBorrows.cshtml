@@ -1,9 +1,8 @@
 ﻿@using vidly.ViewModels
-
 @{
-    ViewBag.Title = "AllBorrows";
+    ViewBag.Title = "CurrentBorrows";
     Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
-    var borrows = (List<CustomerBorrowHistory>) ViewBag.allBorrows;
+    var borrows = (List<CustomerBorrowHistory>)ViewBag.allBorrows;
 }
 
 <h2>All Borrows</h2>

@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
 using Microsoft.Ajax.Utilities;
+using vidly.ViewModels;
 using vidlyDbContext;
 using vidlyDbContext.Entities;
 //using Customer = vidly.Models.CustomerViewModel;
@@ -51,7 +52,14 @@ namespace vidly.Controllers
 
 		public int GetSessionId()
 		{
-			return (int)Session["UserId"];
+			if ((int)Session["UserId"] == 0)
+			{
+				return 0;
+			}
+			else
+			{
+				return (int)Session["UserId"];
+			}
 		}
 
 		public bool AddOrUpdateCustomer(vidlyDbContext.Entities.Customer customer)
@@ -210,13 +218,14 @@ namespace vidly.Controllers
 							   join m in context.Movies on bh.MovieId equals m.Id
 							   where bh.CustomerId == sessionId
 							   orderby bh.BorrowDate descending
-							   select new
+							   select new CustomerBorrowHistory()
 							   {
 								   MovieName = m.Name,
 								   DateOfBorrow = bh.BorrowDate,
 								   ReturnDateOfBorrow = bh.ReturnDate,
 								   StatusOfBorrow = bh.BorrowStatus
 							   }).ToList();
+				
 				ViewBag.allBorrows = borrows;
 				return View();
 			}
@@ -230,8 +239,22 @@ namespace vidly.Controllers
 		{
 			if (GetSessionId() != 0)
 			{
-			    var sessionId = GetSessionId();
-				//current borrow ops to be implemented here
+				var sessionId = GetSessionId();
+
+				var borrows = (from bh in context.BorrowHistories
+							   join m in context.Movies on bh.MovieId equals m.Id
+							   where bh.CustomerId == sessionId && bh.BorrowStatus == "pending"
+							   orderby bh.BorrowDate descending
+							   select new CustomerBorrowHistory()
+							   {
+								   MovieName = m.Name,
+								   DateOfBorrow = bh.BorrowDate,
+								   ReturnDateOfBorrow = bh.ReturnDate,
+								   StatusOfBorrow = bh.BorrowStatus
+							   }).ToList();
+
+				ViewBag.allBorrows = borrows;
+
 				return View();
 			}
 			else

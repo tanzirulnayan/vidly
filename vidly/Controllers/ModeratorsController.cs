@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.SessionState;
 using System.Web.UI;
 using vidly.Models;
+using vidly.ViewModels;
 using vidlyDbContext;
 using Newtonsoft.Json;
 using vidlyDbContext.Entities;
@@ -96,7 +97,14 @@ namespace vidly.Controllers
 
         public int GetSessionId()
         {
-            return (int)Session["UserId"];
+            if ((int)Session["UserId"] == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return (int)Session["UserId"];
+            }
         }
 
         [HttpPost]
@@ -439,6 +447,35 @@ namespace vidly.Controllers
             }
         }
 
+        public ActionResult RentalHistory()
+        {
+            if (GetSessionId() != 0)
+            {
+                var sessionId = GetSessionId();
+
+                var borrows = (from bh in context.BorrowHistories
+                               join m in context.Movies on bh.MovieId equals m.Id
+                               join c in context.Customers on bh.CustomerId equals c.Id
+                               orderby bh.BorrowDate descending
+                               select new ModeratorRentalHistory()
+                               {
+                                   CustomerId = bh.CustomerId,
+                                   CustomerName = c.Name,
+                                   MovieName = m.Name,
+                                   DateOfBorrow = bh.BorrowDate,
+                                   ReturnDateOfBorrow = bh.ReturnDate,
+                                   StatusOfBorrow = bh.BorrowStatus
+                               }).ToList();
+
+                ViewBag.allBorrows = borrows;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+            
+        }
         public ActionResult LogOutModerator()
         {
             if (GetSessionId() != 0)
