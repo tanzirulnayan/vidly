@@ -19,7 +19,7 @@ namespace vidly.Controllers
 		// GET: /Customers/
 
 		VidlyDbContext context = new VidlyDbContext();
-		private string logInUrl = "../Home/Index";
+		private string logInUrl = "../Home/Login";
 		public ActionResult Index()
 		{
 			if (GetSessionId() != 0)
@@ -52,13 +52,19 @@ namespace vidly.Controllers
 
 		public int GetSessionId()
 		{
-			if ((int)Session["UserId"] == 0)
+			var sessionId = 0;
+			if (Session["UserId"] != null)
+			{
+				sessionId = (int)Session["UserId"];
+			}
+
+			if (sessionId == 0)
 			{
 				return 0;
 			}
 			else
 			{
-				return (int)Session["UserId"];
+				return sessionId;
 			}
 		}
 
@@ -170,7 +176,6 @@ namespace vidly.Controllers
 			{
 				//borrow ops here using modal
 				vidlyDbContext.Entities.BorrowHistory borrow = new BorrowHistory();
-				//var sessionId = (int) Session["UserId"];
 				borrow.Id = Guid.NewGuid();
 				borrow.MovieId = id;
 				borrow.CustomerId = GetSessionId();

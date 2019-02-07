@@ -1,15 +1,13 @@
-﻿@using System.Net.Mime
-@using System.Reflection.Emit
-@using vidly.ViewModels
+﻿@using vidly.ViewModels
 
 @{
-    ViewBag.Title = "RentalHistory";
+    ViewBag.Title = "ExpiredPendingRentals";
     Layout = "~/Views/Shared/_LayoutModerator.cshtml";
-    var borrows = (List<ModeratorRentalHistory>)ViewBag.allBorrows;
     var fine = 0.0;
+    var borrows = (List<ModeratorRentalHistory>)ViewBag.allBorrows;
 }
 
-<h2>Rental History</h2>
+<h2>Expired Pending Rentals</h2>
 <table class="table">
     <tr>
         <th>Customer Id</th>
@@ -42,5 +40,3 @@
         </tr>
     }
 </table>
-
-

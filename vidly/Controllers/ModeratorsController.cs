@@ -19,7 +19,7 @@ namespace vidly.Controllers
     {
         // GET: /Moderators/
         VidlyDbContext context = new VidlyDbContext();
-        private string logInUrl = "../Home/Index";
+        private string logInUrl = "../Home/Login";
         public ActionResult Index()
         {
             if (GetSessionId() != 0)
@@ -97,13 +97,19 @@ namespace vidly.Controllers
 
         public int GetSessionId()
         {
-            if ((int)Session["UserId"] == 0)
+            var sessionId = 0;
+            if (Session["UserId"] != null)
+            {
+                sessionId = (int)Session["UserId"];
+            }
+            
+            if (sessionId == 0)
             {
                 return 0;
             }
             else
             {
-                return (int)Session["UserId"];
+                return sessionId;
             }
         }
 
@@ -451,14 +457,13 @@ namespace vidly.Controllers
         {
             if (GetSessionId() != 0)
             {
-                var sessionId = GetSessionId();
-
                 var borrows = (from bh in context.BorrowHistories
                                join m in context.Movies on bh.MovieId equals m.Id
                                join c in context.Customers on bh.CustomerId equals c.Id
                                orderby bh.BorrowDate descending
                                select new ModeratorRentalHistory()
                                {
+                                   BorrowId = bh.Id,
                                    CustomerId = bh.CustomerId,
                                    CustomerName = c.Name,
                                    MovieName = m.Name,
@@ -476,6 +481,137 @@ namespace vidly.Controllers
             }
             
         }
+
+        public ActionResult Movies()
+        {
+            if (GetSessionId() != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
+
+        public ActionResult Customers()
+        {
+            if (GetSessionId() != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
+
+        public ActionResult Rents()
+        {
+            if (GetSessionId() != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
+
+        public ActionResult PendingRentals()
+        {
+            if (GetSessionId() != 0)
+            {
+                var borrows = (from bh in context.BorrowHistories
+                               join m in context.Movies on bh.MovieId equals m.Id
+                               join c in context.Customers on bh.CustomerId equals c.Id
+                               where bh.BorrowStatus == "pending"
+                               orderby bh.BorrowDate descending 
+                               select new ModeratorRentalHistory()
+                               {
+                                   BorrowId = bh.Id,
+                                   CustomerId = bh.CustomerId,
+                                   CustomerName = c.Name,
+                                   MovieName = m.Name,
+                                   DateOfBorrow = bh.BorrowDate,
+                                   ReturnDateOfBorrow = bh.ReturnDate,
+                                   StatusOfBorrow = bh.BorrowStatus
+                               }).ToList();
+
+                ViewBag.allBorrows = borrows;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
+
+        public ActionResult ExpiredPendingRentals()
+        {
+            if (GetSessionId() != 0)
+            {
+                var borrows = (from bh in context.BorrowHistories
+                               join m in context.Movies on bh.MovieId equals m.Id
+                               join c in context.Customers on bh.CustomerId equals c.Id
+                               where bh.BorrowStatus == "pending" && bh.ReturnDate < DateTime.Today
+                               orderby bh.BorrowDate descending 
+                               select new ModeratorRentalHistory()
+                               {
+                                   BorrowId = bh.Id,
+                                   CustomerId = bh.CustomerId,
+                                   CustomerName = c.Name,
+                                   MovieName = m.Name,
+                                   DateOfBorrow = bh.BorrowDate,
+                                   ReturnDateOfBorrow = bh.ReturnDate,
+                                   StatusOfBorrow = bh.BorrowStatus
+                               }).ToList();
+
+                ViewBag.allBorrows = borrows;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
+
+        public ActionResult AddRent()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddRent(vidlyDbContext.Entities.BorrowHistory borrowHistory)
+        {
+            //implement addRent here
+            if (GetSessionId() != 0)
+            {
+                //borrow ops here using modal
+                vidlyDbContext.Entities.BorrowHistory borrow = new BorrowHistory();
+                borrow.Id = Guid.NewGuid();
+                borrow.MovieId = borrowHistory.MovieId;
+                borrow.CustomerId = borrowHistory.CustomerId;
+                borrow.BorrowDate = DateTime.Today;
+                borrow.ReturnDate = DateTime.Today.AddDays(7);
+                borrow.BorrowStatus = "pending";
+
+                context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
+                context.SaveChanges();
+
+                var movie = context.Movies.FirstOrDefault(m => m.Id == borrowHistory.MovieId);
+                movie.BorrowCount++;
+
+                context.Movies.AddOrUpdate(m => m.Id, movie);
+                context.SaveChanges();
+
+                return RedirectToAction("PendingRentals");
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
         public ActionResult LogOutModerator()
         {
             if (GetSessionId() != 0)
@@ -483,6 +619,46 @@ namespace vidly.Controllers
                 Session.Abandon();
             }
             return RedirectToAction(logInUrl);
+        }
+
+        public ActionResult ReturnMovie()
+        {
+            if (GetSessionId() != 0)
+            {
+                var borrows = (from bh in context.BorrowHistories
+                               join m in context.Movies on bh.MovieId equals m.Id
+                               join c in context.Customers on bh.CustomerId equals c.Id
+                               where bh.BorrowStatus == "pending"
+                               orderby bh.BorrowDate ascending 
+                               select new ModeratorRentalHistory()
+                               {
+                                   BorrowId = bh.Id,
+                                   CustomerId = bh.CustomerId,
+                                   CustomerName = c.Name,
+                                   MovieName = m.Name,
+                                   DateOfBorrow = bh.BorrowDate,
+                                   ReturnDateOfBorrow = bh.ReturnDate,
+                                   StatusOfBorrow = bh.BorrowStatus
+                               }).ToList();
+
+                ViewBag.allBorrows = borrows;
+                return View(borrows);
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ReturnMovie(int id)
+        {
+            return View();
+        }
+
+        public ActionResult CancelRent()
+        {
+            return View();
         }
     }
 }

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<vidly.ViewModels.ModeratorRentalHistory>
+
+@{
+    ViewBag.Title = "Return Movie";
+    Layout = "~/Views/Shared/_LayoutModerator.cshtml";
+}
+
+<h2>Return Movie</h2>
+
+<table class="table">
+    <tr>
+        <th>Customer Id</th>
+        <th>Customer Name</th>
+        <th>Movie Name</th>
+        <th>Borrow Date</th>
+        <th>Return Date</th>
+        <th>Fine</th>
+        <th>Status</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MovieName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateOfBorrow)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReturnDateOfBorrow)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fine)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusOfBorrow)
+        </td>
+        <td>
+            @Html.ActionLink("Movie Return", "ReturnMovie", new { id=item.BorrowId }) |
+            @Html.ActionLink("Cancel Rent", "CancelRent", new { id = item.BorrowId })
+        </td>
+    </tr>
+}
+
+</table>

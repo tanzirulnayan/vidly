@@ -266,6 +266,13 @@
     <Content Include="Views\Customers\AllBorrows.cshtml" />
     <Content Include="Views\Customers\CurrentBorrows.cshtml" />
     <Content Include="Views\Moderators\RentalHistory.cshtml" />
+    <Content Include="Views\Moderators\Movies.cshtml" />
+    <Content Include="Views\Moderators\Customers.cshtml" />
+    <Content Include="Views\Moderators\Rents.cshtml" />
+    <Content Include="Views\Moderators\PendingRentals.cshtml" />
+    <Content Include="Views\Moderators\ExpiredPendingRentals.cshtml" />
+    <Content Include="Views\Moderators\AddRent.cshtml" />
+    <Content Include="Views\Moderators\ReturnMovie.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
