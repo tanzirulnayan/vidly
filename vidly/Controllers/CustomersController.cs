@@ -53,18 +53,24 @@ namespace vidly.Controllers
 		public int GetSessionId()
 		{
 			var sessionId = 0;
+			var sessionUserType = "";
 			if (Session["UserId"] != null)
 			{
 				sessionId = (int)Session["UserId"];
 			}
 
-			if (sessionId == 0)
+			if (Session["UserType"] != null)
 			{
-				return 0;
+				sessionUserType = (string) Session["UserType"];
+			}
+
+			if (sessionId != 0 && sessionUserType == "customer")
+			{
+				return sessionId;
 			}
 			else
 			{
-				return sessionId;
+				return 0;
 			}
 		}
 

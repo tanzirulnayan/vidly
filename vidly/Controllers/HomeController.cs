@@ -132,6 +132,7 @@ namespace vidly.Controllers
                     if (login.Id == customer.Id && login.Password == customer.Password)
                     {
                         Session["UserId"] = customer.Id;
+                        Session["UserType"] = customer.UserType;
                         Session["UserName"] = customer.Name;
                         redirectString = "../Customers/Index";
                     }
@@ -149,6 +150,7 @@ namespace vidly.Controllers
                     if (login.Id == moderator.Id && login.Password == moderator.Password)
                     {
                         Session["UserId"] = moderator.Id;
+                        Session["UserType"] = moderator.UserType;
                         Session["UserName"] = moderator.Name;
                         redirectString = "../Moderators/Index";
                     }

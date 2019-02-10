@@ -43,7 +43,7 @@
             @Html.DisplayFor(modelItem => item.StatusOfBorrow)
         </td>
         <td>
-            @Html.ActionLink("Movie Return", "ReturnMovie", new { id=item.BorrowId }) |
+            @Html.ActionLink("Movie Return", "ReturnMovieToDb", new { id = item.BorrowId }) |
             @Html.ActionLink("Cancel Rent", "CancelRent", new { id = item.BorrowId })
         </td>
     </tr>

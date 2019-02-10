@@ -1,5 +1,8 @@
 ﻿
 @using Microsoft.AspNet.Identity
+@*@using vidly.ViewModels
+@model EnumCollections*@
+
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -17,10 +20,73 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Movies", "Movies", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Customers", "Customers", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Rents", "Rents", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        
+        <li>
+            <div class="dropdown">
+                <button class="dropbtn">Movies</button>
+                <div class="dropdown-content">
+                    @Html.ActionLink("Add Movie", "AddMovie", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                    @Html.ActionLink("Browse Movies", "BrowseMovies", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                </div>
+            </div>
+        </li>
+        <li>@Html.ActionLink("Customers", "BrowseCustomers", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>
+            <div class="dropdown">
+                <button class="dropbtn">Rents</button>
+                <div class="dropdown-content">
+                    @Html.ActionLink("Add Rent", "AddRent", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                    @Html.ActionLink("Movie Return", "ReturnMovie", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                    @Html.ActionLink("Manage Rents", "Rents", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                </div>
+            </div>
+        </li>
         <li>@Html.ActionLink("Profile", "ModeratorProfile", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         <li>@Html.ActionLink("Log Out", "LogOutModerator", "Moderators", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
+
+
+<style>
+    .dropbtn {
+        /*background-color: #4CAF50;*/
+        background-color: black;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #ddd;
+            }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: black;
+    }
+</style>

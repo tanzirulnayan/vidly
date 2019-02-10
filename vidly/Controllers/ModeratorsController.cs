@@ -98,18 +98,24 @@ namespace vidly.Controllers
         public int GetSessionId()
         {
             var sessionId = 0;
+            var sessionUserType = "";
             if (Session["UserId"] != null)
             {
-                sessionId = (int)Session["UserId"];
+                sessionId = (int) Session["UserId"];
             }
-            
-            if (sessionId == 0)
+
+            if (Session["UserType"] != null)
             {
-                return 0;
+                sessionUserType = (string) Session["UserType"];
+            }
+
+            if (sessionId != 0 && sessionUserType == "moderator")
+            {
+                return sessionId;
             }
             else
             {
-                return sessionId;
+                return 0;
             }
         }
 
@@ -482,30 +488,6 @@ namespace vidly.Controllers
             
         }
 
-        public ActionResult Movies()
-        {
-            if (GetSessionId() != 0)
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction(logInUrl);
-            }
-        }
-
-        public ActionResult Customers()
-        {
-            if (GetSessionId() != 0)
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction(logInUrl);
-            }
-        }
-
         public ActionResult Rents()
         {
             if (GetSessionId() != 0)
@@ -578,7 +560,14 @@ namespace vidly.Controllers
 
         public ActionResult AddRent()
         {
-            return View();
+            if (GetSessionId() != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
 
         [HttpPost]
@@ -600,7 +589,10 @@ namespace vidly.Controllers
                 context.SaveChanges();
 
                 var movie = context.Movies.FirstOrDefault(m => m.Id == borrowHistory.MovieId);
-                movie.BorrowCount++;
+                if (movie != null)
+                {
+                    movie.BorrowCount++;
+                }
 
                 context.Movies.AddOrUpdate(m => m.Id, movie);
                 context.SaveChanges();
@@ -649,16 +641,42 @@ namespace vidly.Controllers
                 return RedirectToAction(logInUrl);
             }
         }
-
-        [HttpPost]
-        public ActionResult ReturnMovie(int id)
+        public ActionResult ReturnMovieToDb(Guid id)
         {
-            return View();
+
+            if (GetSessionId() != 0)
+            {
+                var borrow = context.BorrowHistories.FirstOrDefault(m => m.Id == id);
+                if (borrow != null)
+                {
+                    borrow.BorrowStatus = "returned";
+                    context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
+                    context.SaveChanges();
+                }
+                return RedirectToAction("ReturnMovie");
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
 
-        public ActionResult CancelRent()
+        public ActionResult CancelRent(Guid id)
         {
-            return View();
+            if (GetSessionId() != 0)
+            {
+                var rent = context.BorrowHistories.FirstOrDefault(a => a.Id == id);
+                if (rent != null)
+                {
+                    context.BorrowHistories.Remove(rent);
+                    context.SaveChanges();
+                }
+                return RedirectToAction("ReturnMovie");
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
         }
     }
 }
