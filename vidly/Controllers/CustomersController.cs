@@ -79,10 +79,6 @@ namespace vidly.Controllers
 			var flag = false;
 			try
 			{
-				//if (customer.Id == 0)
-				//{
-				//    customer.UserType = "customer";
-				//}
 				customer.UserType = "customer";
 				context.Customers.AddOrUpdate(m => m.Id, customer);
 				context.SaveChanges();

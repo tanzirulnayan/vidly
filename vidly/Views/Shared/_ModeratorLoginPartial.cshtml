@@ -27,7 +27,6 @@ else
                 <div class="dropdown-content">
                     @Html.ActionLink("Add Movie", "AddMovie", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
                     @Html.ActionLink("Browse Movies", "BrowseMovies", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
-                </div>
             </div>
         </li>
         <li>@Html.ActionLink("Customers", "BrowseCustomers", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
@@ -37,7 +36,9 @@ else
                 <div class="dropdown-content">
                     @Html.ActionLink("Add Rent", "AddRent", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
                     @Html.ActionLink("Movie Return", "ReturnMovie", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
-                    @Html.ActionLink("Manage Rents", "Rents", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                    @Html.ActionLink("Pending Rents", "PendingRentals", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                    @Html.ActionLink("Expired Rents", "ExpiredPendingRentals", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                    @Html.ActionLink("Rental History", "RentalHistory", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
                 </div>
             </div>
         </li>

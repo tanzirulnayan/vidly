@@ -17,6 +17,7 @@
         <th>Return Date</th>
         <th>Fine</th>
         <th>Status</th>
+        <th>Customer Details</th>
     </tr>
 
     @foreach (var movie in borrows)
@@ -37,6 +38,7 @@
             }
             <td>@fine</td>
             <td>@movie.StatusOfBorrow</td>
+            <td>@Html.ActionLink("Details", "CustomerDetails", new { id = movie.CustomerId })</td>
         </tr>
     }
 </table>
