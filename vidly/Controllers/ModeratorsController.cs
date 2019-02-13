@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
@@ -233,20 +234,6 @@ namespace vidly.Controllers
         [HttpPost]
         public ActionResult EditProfile(vidlyDbContext.Entities.Moderator moderator)
         {
-            //if (moderator.Id != 0)
-            //{
-            //    context.Moderators.AddOrUpdate(m => m.Id, moderator);
-            //    context.SaveChanges();
-            //}
-            //else
-            //{
-            //    moderator.UserType = "moderator";
-            //    context.Moderators.Add(moderator);
-            //    context.SaveChanges();
-            //}
-
-            //return RedirectToAction("ModeratorProfile");
-
             if (GetSessionId() != 0)
             {
                 if (AddOrUpdateModerator(moderator))
@@ -463,20 +450,32 @@ namespace vidly.Controllers
         {
             if (GetSessionId() != 0)
             {
-                var borrows = (from bh in context.BorrowHistories
-                               join m in context.Movies on bh.MovieId equals m.Id
-                               join c in context.Customers on bh.CustomerId equals c.Id
-                               orderby bh.BorrowDate descending
-                               select new ModeratorRentalHistory()
-                               {
-                                   BorrowId = bh.Id,
-                                   CustomerId = bh.CustomerId,
-                                   CustomerName = c.Name,
-                                   MovieName = m.Name,
-                                   DateOfBorrow = bh.BorrowDate,
-                                   ReturnDateOfBorrow = bh.ReturnDate,
-                                   StatusOfBorrow = bh.BorrowStatus
-                               }).ToList();
+                var borrows = context.BorrowHistories.Include("Movie").Include("Customer").Select(
+                    s => new ModeratorRentalHistory()
+                    {
+                        BorrowId = s.Id,
+                        CustomerId = s.Customer.Id,
+                        CustomerName = s.Customer.Name,
+                        MovieName = s.Movie.Name,
+                        DateOfBorrow = s.BorrowDate,
+                        ReturnDateOfBorrow = s.ReturnDate,
+                        StatusOfBorrow = s.BorrowStatus
+                    }).ToList();
+
+                //var borrows = (from bh in context.BorrowHistories
+                //               join m in context.Movies on bh.MovieId equals m.Id
+                //               join c in context.Customers on bh.CustomerId equals c.Id
+                //               orderby bh.BorrowDate descending
+                //               select new ModeratorRentalHistory()
+                //               {
+                //                   BorrowId = bh.Id,
+                //                   CustomerId = bh.CustomerId,
+                //                   CustomerName = c.Name,
+                //                   MovieName = m.Name,
+                //                   DateOfBorrow = bh.BorrowDate,
+                //                   ReturnDateOfBorrow = bh.ReturnDate,
+                //                   StatusOfBorrow = bh.BorrowStatus
+                //               }).ToList();
 
                 ViewBag.allBorrows = borrows;
                 return View();
@@ -504,21 +503,33 @@ namespace vidly.Controllers
         {
             if (GetSessionId() != 0)
             {
-                var borrows = (from bh in context.BorrowHistories
-                               join m in context.Movies on bh.MovieId equals m.Id
-                               join c in context.Customers on bh.CustomerId equals c.Id
-                               where bh.BorrowStatus == "pending"
-                               orderby bh.BorrowDate descending 
-                               select new ModeratorRentalHistory()
-                               {
-                                   BorrowId = bh.Id,
-                                   CustomerId = bh.CustomerId,
-                                   CustomerName = c.Name,
-                                   MovieName = m.Name,
-                                   DateOfBorrow = bh.BorrowDate,
-                                   ReturnDateOfBorrow = bh.ReturnDate,
-                                   StatusOfBorrow = bh.BorrowStatus
-                               }).ToList();
+                var borrows = context.BorrowHistories.Where(x => x.BorrowStatus == "pending").Include(x => x.Movie).Include(x => x.Customer).Select(
+                    s => new ModeratorRentalHistory()
+                    {
+                        BorrowId = s.Id,
+                        CustomerId = s.Customer.Id,
+                        CustomerName = s.Customer.Name,
+                        MovieName = s.Movie.Name,
+                        DateOfBorrow = s.BorrowDate,
+                        ReturnDateOfBorrow = s.ReturnDate,
+                        StatusOfBorrow = s.BorrowStatus
+                    }).OrderByDescending(x => x.DateOfBorrow).ToList();
+
+                //var borrows = (from bh in context.BorrowHistories
+                //               join m in context.Movies on bh.MovieId equals m.Id
+                //               join c in context.Customers on bh.CustomerId equals c.Id
+                //               where bh.BorrowStatus == "pending"
+                //               orderby bh.BorrowDate descending
+                //               select new ModeratorRentalHistory()
+                //               {
+                //                   BorrowId = bh.Id,
+                //                   CustomerId = bh.CustomerId,
+                //                   CustomerName = c.Name,
+                //                   MovieName = m.Name,
+                //                   DateOfBorrow = bh.BorrowDate,
+                //                   ReturnDateOfBorrow = bh.ReturnDate,
+                //                   StatusOfBorrow = bh.BorrowStatus
+                //               }).ToList();
 
                 ViewBag.allBorrows = borrows;
                 return View();
@@ -533,21 +544,33 @@ namespace vidly.Controllers
         {
             if (GetSessionId() != 0)
             {
-                var borrows = (from bh in context.BorrowHistories
-                               join m in context.Movies on bh.MovieId equals m.Id
-                               join c in context.Customers on bh.CustomerId equals c.Id
-                               where bh.BorrowStatus == "pending" && bh.ReturnDate < DateTime.Today
-                               orderby bh.BorrowDate descending 
-                               select new ModeratorRentalHistory()
-                               {
-                                   BorrowId = bh.Id,
-                                   CustomerId = bh.CustomerId,
-                                   CustomerName = c.Name,
-                                   MovieName = m.Name,
-                                   DateOfBorrow = bh.BorrowDate,
-                                   ReturnDateOfBorrow = bh.ReturnDate,
-                                   StatusOfBorrow = bh.BorrowStatus
-                               }).ToList();
+                var borrows = context.BorrowHistories.Where(x => x.BorrowStatus == "pending" && x.ReturnDate < DateTime.UtcNow.Date).Include(x => x.Movie).Include(x => x.Customer).Select(
+                    s => new ModeratorRentalHistory()
+                    {
+                        BorrowId = s.Id,
+                        CustomerId = s.Customer.Id,
+                        CustomerName = s.Customer.Name,
+                        MovieName = s.Movie.Name,
+                        DateOfBorrow = s.BorrowDate,
+                        ReturnDateOfBorrow = s.ReturnDate,
+                        StatusOfBorrow = s.BorrowStatus
+                    }).OrderByDescending(x => x.DateOfBorrow).ToList();
+
+                //var borrows = (from bh in context.BorrowHistories
+                //               join m in context.Movies on bh.MovieId equals m.Id
+                //               join c in context.Customers on bh.CustomerId equals c.Id
+                //               where bh.BorrowStatus == "pending" && bh.ReturnDate < DateTime.UtcNow.Date
+                //               orderby bh.BorrowDate descending
+                //               select new ModeratorRentalHistory()
+                //               {
+                //                   BorrowId = bh.Id,
+                //                   CustomerId = bh.CustomerId,
+                //                   CustomerName = c.Name,
+                //                   MovieName = m.Name,
+                //                   DateOfBorrow = bh.BorrowDate,
+                //                   ReturnDateOfBorrow = bh.ReturnDate,
+                //                   StatusOfBorrow = bh.BorrowStatus
+                //               }).ToList();
 
                 ViewBag.allBorrows = borrows;
                 return View();
@@ -581,8 +604,8 @@ namespace vidly.Controllers
                 borrow.Id = Guid.NewGuid();
                 borrow.MovieId = borrowHistory.MovieId;
                 borrow.CustomerId = borrowHistory.CustomerId;
-                borrow.BorrowDate = DateTime.Today;
-                borrow.ReturnDate = DateTime.Today.AddDays(7);
+                borrow.BorrowDate = DateTime.UtcNow.Date;
+                borrow.ReturnDate = DateTime.UtcNow.Date.AddDays(7);
                 borrow.BorrowStatus = "pending";
 
                 context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
@@ -617,21 +640,33 @@ namespace vidly.Controllers
         {
             if (GetSessionId() != 0)
             {
-                var borrows = (from bh in context.BorrowHistories
-                               join m in context.Movies on bh.MovieId equals m.Id
-                               join c in context.Customers on bh.CustomerId equals c.Id
-                               where bh.BorrowStatus == "pending"
-                               orderby bh.BorrowDate ascending 
-                               select new ModeratorRentalHistory()
-                               {
-                                   BorrowId = bh.Id,
-                                   CustomerId = bh.CustomerId,
-                                   CustomerName = c.Name,
-                                   MovieName = m.Name,
-                                   DateOfBorrow = bh.BorrowDate,
-                                   ReturnDateOfBorrow = bh.ReturnDate,
-                                   StatusOfBorrow = bh.BorrowStatus
-                               }).ToList();
+                var borrows = context.BorrowHistories.Where(x => x.BorrowStatus == "pending").Include(x => x.Movie).Include(x => x.Customer).Select(
+                    s => new ModeratorRentalHistory()
+                    {
+                        BorrowId = s.Id,
+                        CustomerId = s.Customer.Id,
+                        CustomerName = s.Customer.Name,
+                        MovieName = s.Movie.Name,
+                        DateOfBorrow = s.BorrowDate,
+                        ReturnDateOfBorrow = s.ReturnDate,
+                        StatusOfBorrow = s.BorrowStatus
+                    }).OrderBy(x => x.DateOfBorrow).ToList();
+
+                //var borrows = (from bh in context.BorrowHistories
+                //               join m in context.Movies on bh.MovieId equals m.Id
+                //               join c in context.Customers on bh.CustomerId equals c.Id
+                //               where bh.BorrowStatus == "pending"
+                //               orderby bh.BorrowDate ascending
+                //               select new ModeratorRentalHistory()
+                //               {
+                //                   BorrowId = bh.Id,
+                //                   CustomerId = bh.CustomerId,
+                //                   CustomerName = c.Name,
+                //                   MovieName = m.Name,
+                //                   DateOfBorrow = bh.BorrowDate,
+                //                   ReturnDateOfBorrow = bh.ReturnDate,
+                //                   StatusOfBorrow = bh.BorrowStatus
+                //               }).ToList();
 
                 ViewBag.allBorrows = borrows;
                 return View(borrows);

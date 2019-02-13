@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Return Movie";
     Layout = "~/Views/Shared/_LayoutModerator.cshtml";
+    var fine = 0.0;
 }
 
 <h2>Return Movie</h2>
@@ -36,8 +37,16 @@
         <td>
             @Html.DisplayFor(modelItem => item.ReturnDateOfBorrow)
         </td>
+        @if (DateTime.UtcNow.Date > item.ReturnDateOfBorrow)
+        {
+            fine = 5 * (DateTime.UtcNow.Date - item.ReturnDateOfBorrow).TotalDays;
+        }
+        else
+        {
+            fine = 0.0;
+        }
         <td>
-            @Html.DisplayFor(modelItem => item.Fine)
+            @fine
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.StatusOfBorrow)

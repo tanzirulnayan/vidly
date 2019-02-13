@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "AllBorrows";
     Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
-    var borrows = (List<CustomerBorrowHistory>) ViewBag.allBorrows;
+    var borrows = (List<CustomerBorrowHistory>)ViewBag.allBorrows;
     var fine = 0.0;
 }
 
@@ -23,9 +23,9 @@
             <td>@movie.MovieName</td>
             <td>@movie.DateOfBorrow</td>
             <td>@movie.ReturnDateOfBorrow</td>
-            @if (DateTime.Today > movie.ReturnDateOfBorrow)
+            @if (DateTime.UtcNow.Date > movie.ReturnDateOfBorrow)
             {
-                fine = 5 * (DateTime.Today - movie.ReturnDateOfBorrow).TotalDays;
+                fine = 5 * (DateTime.UtcNow.Date - movie.ReturnDateOfBorrow).TotalDays;
             }
             else
             {

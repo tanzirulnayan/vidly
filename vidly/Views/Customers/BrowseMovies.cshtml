@@ -4,9 +4,25 @@
     ViewBag.Title = "BrowseMovies";
     Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
 }
-
+<head>
+    <title>Browse Movies</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+</head>
 <h2>Browse Movies</h2>
-
+<br />
+Search  Movie :
+<input id="myInput" type="text" placeholder="Search..">
+<br><br>
 <table class="table">
     <tr>
         <th>
@@ -23,26 +39,27 @@
         </th>
         <th></th>
     </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Genre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Year)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BorrowCount)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "MovieDetails", new { id = item.Id }) |
-            @Html.ActionLink("Borrow", "BorrowMovie", new { id=item.Id }) 
-        </td>
-    </tr>
-}
-
+    <tbody id="myTable">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BorrowCount)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "MovieDetails", new { id = item.Id }) |
+                    @Html.ActionLink("Borrow", "BorrowMovie", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

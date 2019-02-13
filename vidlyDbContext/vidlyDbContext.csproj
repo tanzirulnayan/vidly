@@ -64,6 +64,10 @@
     <Compile Include="Migrations\201902050943277_ReturnDate_BorrowStatus_Added_In_BorrowHistory.Designer.cs">
       <DependentUpon>201902050943277_ReturnDate_BorrowStatus_Added_In_BorrowHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902121136134_keysAdded.cs" />
+    <Compile Include="Migrations\201902121136134_keysAdded.Designer.cs">
+      <DependentUpon>201902121136134_keysAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Moderator.cs" />
     <Compile Include="Entities\Movie.cs" />
@@ -87,6 +91,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902050943277_ReturnDate_BorrowStatus_Added_In_BorrowHistory.resx">
       <DependentUpon>201902050943277_ReturnDate_BorrowStatus_Added_In_BorrowHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902121136134_keysAdded.resx">
+      <DependentUpon>201902121136134_keysAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

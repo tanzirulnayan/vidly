@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
@@ -98,7 +99,7 @@ namespace vidly.Controllers
 				var sessionId = GetSessionId();
 				var customer = context.Customers.FirstOrDefault(a => a.Id == sessionId);
 
-				//var test = context.Customers.Include("Movies").Where(x => x.Id == 12).SelectMany()
+				//var test = context.Customers.Include("Movies").Where(x => x.Id == sessionId).SelectMany()
 
 				//var customer = context.Customers.Where(a => a.Id ==6).Select(p => new {p.Id, p.Name});;
 
@@ -181,8 +182,8 @@ namespace vidly.Controllers
 				borrow.Id = Guid.NewGuid();
 				borrow.MovieId = id;
 				borrow.CustomerId = GetSessionId();
-				borrow.BorrowDate = DateTime.Today;
-				borrow.ReturnDate = DateTime.Today.AddDays(7);
+				borrow.BorrowDate = DateTime.UtcNow.Date;
+				borrow.ReturnDate = DateTime.UtcNow.Date.AddDays(7);
 				borrow.BorrowStatus = "pending";
 
 				context.BorrowHistories.AddOrUpdate(m => m.Id, borrow);
@@ -221,17 +222,26 @@ namespace vidly.Controllers
 			{
 				var sessionId = GetSessionId();
 
-				var borrows = (from bh in context.BorrowHistories
-							   join m in context.Movies on bh.MovieId equals m.Id
-							   where bh.CustomerId == sessionId
-							   orderby bh.BorrowDate descending
-							   select new CustomerBorrowHistory()
-							   {
-								   MovieName = m.Name,
-								   DateOfBorrow = bh.BorrowDate,
-								   ReturnDateOfBorrow = bh.ReturnDate,
-								   StatusOfBorrow = bh.BorrowStatus
-							   }).ToList();
+				var borrows = context.BorrowHistories.Where(x => x.CustomerId == sessionId).Include(x => x.Movie).Select(
+					s => new CustomerBorrowHistory(){
+								MovieName = s.Movie.Name,
+								DateOfBorrow = s.BorrowDate,
+								ReturnDateOfBorrow = s.ReturnDate,
+								StatusOfBorrow = s.BorrowStatus
+							}).ToList();
+
+
+				//var borrows = (from bh in context.BorrowHistories
+				//               join m in context.Movies on bh.MovieId equals m.Id
+				//               where bh.CustomerId == sessionId
+				//               orderby bh.BorrowDate descending
+				//               select new CustomerBorrowHistory()
+				//               {
+				//                   MovieName = m.Name,
+				//                   DateOfBorrow = bh.BorrowDate,
+				//                   ReturnDateOfBorrow = bh.ReturnDate,
+				//                   StatusOfBorrow = bh.BorrowStatus
+				//               }).ToList();
 				
 				ViewBag.allBorrows = borrows;
 				return View();
@@ -248,17 +258,26 @@ namespace vidly.Controllers
 			{
 				var sessionId = GetSessionId();
 
-				var borrows = (from bh in context.BorrowHistories
-							   join m in context.Movies on bh.MovieId equals m.Id
-							   where bh.CustomerId == sessionId && bh.BorrowStatus == "pending"
-							   orderby bh.BorrowDate descending
-							   select new CustomerBorrowHistory()
-							   {
-								   MovieName = m.Name,
-								   DateOfBorrow = bh.BorrowDate,
-								   ReturnDateOfBorrow = bh.ReturnDate,
-								   StatusOfBorrow = bh.BorrowStatus
-							   }).ToList();
+				var borrows = context.BorrowHistories.Where(x => x.CustomerId == sessionId && x.BorrowStatus == "pending").Include(x => x.Movie).Select(
+					s => new CustomerBorrowHistory()
+					{
+						MovieName = s.Movie.Name,
+						DateOfBorrow = s.BorrowDate,
+						ReturnDateOfBorrow = s.ReturnDate,
+						StatusOfBorrow = s.BorrowStatus
+					}).OrderByDescending(x => x.DateOfBorrow).ToList();
+
+				//var borrows = (from bh in context.BorrowHistories
+				//               join m in context.Movies on bh.MovieId equals m.Id
+				//               where bh.CustomerId == sessionId && bh.BorrowStatus == "pending"
+				//               orderby bh.BorrowDate descending
+				//               select new CustomerBorrowHistory()
+				//               {
+				//                   MovieName = m.Name,
+				//                   DateOfBorrow = bh.BorrowDate,
+				//                   ReturnDateOfBorrow = bh.ReturnDate,
+				//                   StatusOfBorrow = bh.BorrowStatus
+				//               }).ToList();
 
 				ViewBag.allBorrows = borrows;
 
