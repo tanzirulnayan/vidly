@@ -39,6 +39,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,6 +70,10 @@
     <Compile Include="Migrations\201902121136134_keysAdded.Designer.cs">
       <DependentUpon>201902121136134_keysAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902171101417_MovieImageAdded.cs" />
+    <Compile Include="Migrations\201902171101417_MovieImageAdded.Designer.cs">
+      <DependentUpon>201902171101417_MovieImageAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Moderator.cs" />
     <Compile Include="Entities\Movie.cs" />
@@ -94,6 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902121136134_keysAdded.resx">
       <DependentUpon>201902121136134_keysAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902171101417_MovieImageAdded.resx">
+      <DependentUpon>201902171101417_MovieImageAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
