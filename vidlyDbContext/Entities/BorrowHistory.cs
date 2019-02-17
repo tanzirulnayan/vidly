@@ -12,16 +12,19 @@ namespace vidlyDbContext.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        
+        [Required]
         public int MovieId { get; set; }
         [ForeignKey("MovieId")]
         public Movie Movie { get; set; }
-        
+        [Required]
         public int CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
+        [Required]
         public DateTime BorrowDate { get; set; }
+        [Required]
         public DateTime ReturnDate { get; set; }
+        [Required]
         public string BorrowStatus { get; set; }
     }
 }

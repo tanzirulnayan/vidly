@@ -15,7 +15,9 @@ namespace vidlyDbContext.Entities
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        [Required]
         public string Genre { get; set; }
+        [Required]
         public int Year { get; set; }
         public string ImagePath { get; set; }
         public int BorrowCount { get; set; }

@@ -8,8 +8,8 @@ using vidlyDbContext.Entities;
 
 namespace vidly.Models
 {
-    public class MovieViewModel
+    public class MovieViewModel : vidlyDbContext.Entities.Movie
     {
-        public Movie Movie { get; set; }
+        
     }
 }
