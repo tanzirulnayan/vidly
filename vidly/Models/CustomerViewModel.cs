@@ -7,7 +7,7 @@ using vidlyDbContext.Entities;
 
 namespace vidly.Models
 {
-    public class CustomerViewModel
+    public class CustomerViewModel : Customer
     {
         public Customer Customer { get; set; }
     }

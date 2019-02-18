@@ -32,3 +32,6 @@ E:\VSprojects\vidly\Vidly\vidlyDbContext\obj\Debug\vidlyDbContext.pdb
 E:\VSprojects\vidly\Vidly\vidlyDbContext\obj\Debug\vidlyDbContext.Migrations.MovieImageAdded.resources
 E:\VSprojects\vidly\Vidly\vidlyDbContext\obj\Debug\vidlyDbContext.csprojResolveAssemblyReference.cache
 E:\VSprojects\vidly\Vidly\vidlyDbContext\obj\Debug\vidlyDbContext.Migrations.AnnonationAdded.resources
+E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.Migrations.MovieImageAdded.resources
+E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.Migrations.AnnonationAdded.resources
+E:\VSprojects\vidly\vidlyDbContext\obj\Debug\vidlyDbContext.Migrations.AgeMadeRequiredInCustomerTable.resources

@@ -19,6 +19,7 @@ namespace vidlyDbContext.Entities
         public string Genre { get; set; }
         [Required]
         public int Year { get; set; }
+        [DisplayName("Upload Image")]
         public string ImagePath { get; set; }
         public int BorrowCount { get; set; }
 

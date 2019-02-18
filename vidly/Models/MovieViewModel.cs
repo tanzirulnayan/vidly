@@ -10,6 +10,7 @@ namespace vidly.Models
 {
     public class MovieViewModel : vidlyDbContext.Entities.Movie
     {
-        
+        public Movie Movie { get; set; }
+        public HttpPostedFileBase ImageFile { get; set; }
     }
 }

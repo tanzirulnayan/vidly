@@ -7,7 +7,7 @@ using vidlyDbContext.Entities;
 
 namespace vidly.Models
 {
-    public class ModeratorViewModel
+    public class ModeratorViewModel : Moderator
     {
         public Moderator Moderator { get; set; }
     }

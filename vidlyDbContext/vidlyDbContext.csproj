@@ -78,6 +78,10 @@
     <Compile Include="Migrations\201902171144030_AnnonationAdded.Designer.cs">
       <DependentUpon>201902171144030_AnnonationAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902180934371_AgeMadeRequiredInCustomerTable.cs" />
+    <Compile Include="Migrations\201902180934371_AgeMadeRequiredInCustomerTable.Designer.cs">
+      <DependentUpon>201902180934371_AgeMadeRequiredInCustomerTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Moderator.cs" />
     <Compile Include="Entities\Movie.cs" />
@@ -110,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902171144030_AnnonationAdded.resx">
       <DependentUpon>201902171144030_AnnonationAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902180934371_AgeMadeRequiredInCustomerTable.resx">
+      <DependentUpon>201902180934371_AgeMadeRequiredInCustomerTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -172,7 +172,6 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
-    <Compile Include="Models\EnumCollection.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\ModeratorViewModel.cs" />
     <Compile Include="Models\MovieViewModel.cs" />
@@ -250,7 +249,6 @@
     <Content Include="Views\Shared\_CustomerLoginPartial.cshtml" />
     <Content Include="Views\Home\ModeratorSignUp.cshtml" />
     <Content Include="Views\Home\CustomerSignUp.cshtml" />
-    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Moderators\EditMovie.cshtml" />
     <Content Include="Views\Moderators\DeleteMovie.cshtml" />
     <Content Include="Views\Moderators\BrowseMovies.cshtml" />
@@ -272,6 +270,7 @@
     <Content Include="Views\Moderators\ExpiredPendingRentals.cshtml" />
     <Content Include="Views\Moderators\AddRent.cshtml" />
     <Content Include="Views\Moderators\ReturnMovie.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

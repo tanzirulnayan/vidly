@@ -123,6 +123,11 @@ namespace vidly.Controllers
         [HttpPost]
         public ActionResult Login(Models.Login login)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return View(login);
+            }
             string redirectString = "Login";
             if (login.UserType == "customer")
             {
