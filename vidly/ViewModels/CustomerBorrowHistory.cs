@@ -11,5 +11,6 @@ namespace vidly.ViewModels
         public DateTime DateOfBorrow { get; set; }
         public DateTime ReturnDateOfBorrow { get; set; }
         public string StatusOfBorrow { get; set; }
+        public string MoviePosterPath { get; set; }
     }
 }

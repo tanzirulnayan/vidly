@@ -9,6 +9,7 @@
 <h2>All Borrows</h2>
 <table class="table">
     <tr>
+        <th></th>
         <th>Movie Name</th>
         <th>Borrow Date</th>
         <th>Return Date</th>
@@ -19,6 +20,12 @@
     @foreach (var movie in borrows)
     {
         <tr>
+            <td>
+                @if (movie.MoviePosterPath != null)
+                {
+                    <img src="@Url.Content(movie.MoviePosterPath)" width="61" height="89" />
+                }
+            </td>
             <td>@movie.MovieName</td>
             <td>@movie.DateOfBorrow</td>
             <td>@movie.ReturnDateOfBorrow</td>

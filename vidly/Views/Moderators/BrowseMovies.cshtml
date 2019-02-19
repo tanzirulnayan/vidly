@@ -72,7 +72,7 @@ Search  Movie :
                     @Html.DisplayFor(modelItem => item.BorrowCount)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "EditMovie", new { id = item.Id }) |
+                    @Html.ActionLink("Edit", "UpdateMovie", new { id = item.Id }) |
                     @Html.ActionLink("Details", "MovieDetails", new { id = item.Id }) |
                     @Html.ActionLink("Delete", "DeleteMovie", new { id = item.Id })
                 </td>

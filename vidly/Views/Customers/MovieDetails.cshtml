@@ -11,6 +11,13 @@
 	<h4>Movie</h4>
 	<hr />
 	<dl class="dl-horizontal">
+		<dt></dt>
+		<dd>
+			@if (Model.ImagePath != null)
+			{
+				<img src="@Url.Content(Model.ImagePath)" width="183" height="267" />
+			}
+		</dd>
 		<dt>
 			@Html.DisplayNameFor(model => model.Name)
 		</dt>

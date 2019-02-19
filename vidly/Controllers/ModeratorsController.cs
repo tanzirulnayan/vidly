@@ -75,6 +75,39 @@ namespace vidly.Controllers
             return flag;
         }
 
+        public bool CreateOrUpdateMovie(MovieViewModel data)
+        {
+            var flag = false;
+            try
+            {
+                if (data.ImageFile != null)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(data.ImageFile.FileName);
+                    var extension = Path.GetExtension(data.ImageFile.FileName);
+                    fileName = fileName + DateTime.UtcNow.ToString("yy-mm-dd") + extension;
+                    data.Movie.ImagePath = "~/ImageStorage/" + fileName;
+                    fileName = Path.Combine(Server.MapPath("~/ImageStorage/"), fileName);
+                    data.ImageFile.SaveAs(fileName);
+                }
+
+                var movie = new Movie();
+                movie.Name = data.Movie.Name;
+                movie.Genre = data.Movie.Genre;
+                movie.Year = data.Movie.Year;
+                movie.ImagePath = data.Movie.ImagePath;
+                movie.BorrowCount = 0;
+                AddOrUpdateMovie(movie);
+                context.SaveChanges();
+                flag = true;
+
+            }
+            catch (Exception e)
+            {
+                flag = false;
+            }
+            return flag;
+        }
+
         public bool AddOrUpdateCustomer(vidlyDbContext.Entities.Customer customer)
         {
             var flag = false;
@@ -188,34 +221,18 @@ namespace vidly.Controllers
             string redirectUrl = "CreateMovie";
             if (GetSessionId() != 0)
             {
-                try
+                if (CreateOrUpdateMovie(data))
                 {
-                    var fileName = Path.GetFileNameWithoutExtension(data.ImageFile.FileName);
-                    var extension = Path.GetExtension(data.ImageFile.FileName);
-                    fileName = fileName + DateTime.UtcNow.ToString("yy-mm-dd") + extension;
-                    data.Movie.ImagePath = "~/ImageStorage/" + fileName;
-                    fileName = Path.Combine(Server.MapPath("~/ImageStorage/"), fileName);
-                    data.ImageFile.SaveAs(fileName);
-
-                    var movie = new Movie();
-                    movie.Name = data.Movie.Name;
-                    movie.Genre = data.Movie.Genre;
-                    movie.Year = data.Movie.Year;
-                    movie.ImagePath = data.Movie.ImagePath;
-                    movie.BorrowCount = 0;
-                    context.Movies.Add(movie);
-                    context.SaveChanges();
                     redirectUrl = "BrowseMovies";
-
                 }
-                catch (Exception e)
+                else
                 {
                     redirectUrl = "CreateMovie";
                 }
             }
             else
             {
-                return RedirectToAction(logInUrl);
+                redirectUrl = logInUrl;
             }
             return RedirectToAction(redirectUrl);
         }
@@ -376,6 +393,52 @@ namespace vidly.Controllers
             
         }
 
+        public ActionResult UpdateMovie(int id)
+        {
+            if (GetSessionId() != 0)
+            {
+                
+                var movie = context.Movies.FirstOrDefault(a => a.Id == id);
+                if (movie != null)
+                {
+                    var movieData = new MovieViewModel();
+                    movieData.Movie.Id = movie.Id;
+                    movieData.Movie.Name = movie.Name;
+                    movieData.Movie.Genre = movie.Genre;
+                    movieData.Movie.Year = movie.Year;
+                    movieData.Movie.ImagePath = movie.ImagePath;
+                    return View(movieData);
+                }
+                else
+                {
+                    return RedirectToAction("BrowseMovies");
+                } 
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }         
+        }
+
+        [HttpPost]
+        public ActionResult UpdateMovie(MovieViewModel data)
+        {
+            if (GetSessionId() != 0)
+            {
+                if (CreateOrUpdateMovie(data))
+                {
+                    return RedirectToAction("MovieDetails/"+data.Movie.Id);
+                }
+                else
+                {
+                    return View(data);
+                }
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
         public ActionResult DeleteMovie(int id)
         {
             if (GetSessionId() != 0)

@@ -227,7 +227,8 @@ namespace vidly.Controllers
 								MovieName = s.Movie.Name,
 								DateOfBorrow = s.BorrowDate,
 								ReturnDateOfBorrow = s.ReturnDate,
-								StatusOfBorrow = s.BorrowStatus
+								StatusOfBorrow = s.BorrowStatus,
+								MoviePosterPath = s.Movie.ImagePath
 							}).ToList();
 
 
@@ -264,7 +265,8 @@ namespace vidly.Controllers
 						MovieName = s.Movie.Name,
 						DateOfBorrow = s.BorrowDate,
 						ReturnDateOfBorrow = s.ReturnDate,
-						StatusOfBorrow = s.BorrowStatus
+						StatusOfBorrow = s.BorrowStatus,
+						MoviePosterPath = s.Movie.ImagePath
 					}).OrderByDescending(x => x.DateOfBorrow).ToList();
 
 				//var borrows = (from bh in context.BorrowHistories

@@ -272,6 +272,7 @@
     <Content Include="Views\Moderators\ReturnMovie.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Moderators\CreateMovie.cshtml" />
+    <Content Include="Views\Moderators\UpdateMovie.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
