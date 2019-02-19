@@ -271,9 +271,11 @@
     <Content Include="Views\Moderators\AddRent.cshtml" />
     <Content Include="Views\Moderators\ReturnMovie.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Moderators\CreateMovie.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ImageStorage\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -1,4 +1,5 @@
-﻿@model vidlyDbContext.Entities.Movie
+﻿@using Microsoft.Ajax.Utilities
+@model vidlyDbContext.Entities.Movie
 
 @{
 	ViewBag.Title = "MovieDetails";
@@ -10,13 +11,25 @@
 <div>
 	<hr />
 	<dl class="dl-horizontal">
+		
 		<dt>
-			@Html.DisplayNameFor(model => model.Id)
+
 		</dt>
 
-		<dd>
-			@Html.DisplayFor(model => model.Id)
-		</dd>
+	    <dd>
+
+	        @if (Model.ImagePath != null)
+	        {
+	            <img src="@Url.Content(Model.ImagePath)" width="183" height="267" />
+	        }
+	    </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
 		<dt>
 			@Html.DisplayNameFor(model => model.Name)
 		</dt>

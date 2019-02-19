@@ -29,6 +29,9 @@ Search  Movie :
             @Html.DisplayNameFor(model => model.Id)
         </th>
         <th>
+            Thumbnail
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
@@ -49,6 +52,12 @@ Search  Movie :
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @if (item.ImagePath != null)
+                    {
+                        <img src="@Url.Content(item.ImagePath)" width="61" height="89"/>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)

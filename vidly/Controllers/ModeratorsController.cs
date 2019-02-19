@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -155,7 +156,7 @@ namespace vidly.Controllers
                 return RedirectToAction(logInUrl);
             }
         }
-
+        //without image
         public ActionResult AddMovie()
         {
             if (GetSessionId() != 0)
@@ -167,6 +168,58 @@ namespace vidly.Controllers
                 return RedirectToAction(logInUrl);
             }
         }
+        //with image
+        public ActionResult CreateMovie()
+        {
+            if (GetSessionId() != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+        }
+
+        //with image
+        [HttpPost]
+        public ActionResult CreateMovie(MovieViewModel data)
+        {
+            string redirectUrl = "CreateMovie";
+            if (GetSessionId() != 0)
+            {
+                try
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(data.ImageFile.FileName);
+                    var extension = Path.GetExtension(data.ImageFile.FileName);
+                    fileName = fileName + DateTime.UtcNow.ToString("yy-mm-dd") + extension;
+                    data.Movie.ImagePath = "~/ImageStorage/" + fileName;
+                    fileName = Path.Combine(Server.MapPath("~/ImageStorage/"), fileName);
+                    data.ImageFile.SaveAs(fileName);
+
+                    var movie = new Movie();
+                    movie.Name = data.Movie.Name;
+                    movie.Genre = data.Movie.Genre;
+                    movie.Year = data.Movie.Year;
+                    movie.ImagePath = data.Movie.ImagePath;
+                    movie.BorrowCount = 0;
+                    context.Movies.Add(movie);
+                    context.SaveChanges();
+                    redirectUrl = "BrowseMovies";
+
+                }
+                catch (Exception e)
+                {
+                    redirectUrl = "CreateMovie";
+                }
+            }
+            else
+            {
+                return RedirectToAction(logInUrl);
+            }
+            return RedirectToAction(redirectUrl);
+        }
+
 
         [HttpGet]
         public ActionResult AddNewMovie(Movie data)
@@ -544,7 +597,7 @@ namespace vidly.Controllers
         {
             if (GetSessionId() != 0)
             {
-                var borrows = context.BorrowHistories.Where(x => x.BorrowStatus == "pending" && x.ReturnDate < DateTime.UtcNow.Date).Include(x => x.Movie).Include(x => x.Customer).Select(
+                var borrows = context.BorrowHistories.Where(x => x.BorrowStatus == "pending" && x.ReturnDate < DateTime.Today).Include(x => x.Movie).Include(x => x.Customer).Select(
                     s => new ModeratorRentalHistory()
                     {
                         BorrowId = s.Id,

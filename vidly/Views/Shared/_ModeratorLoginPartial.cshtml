@@ -24,9 +24,10 @@ else
         <li>
             <div class="dropdown">
                 <button class="dropbtn">Movies</button>
-                <div class="dropdown-content">
-                    @Html.ActionLink("Add Movie", "AddMovie", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
-                    @Html.ActionLink("Browse Movies", "BrowseMovies", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+            <div class="dropdown-content">
+                @Html.ActionLink("Create Movie", "CreateMovie", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                @Html.ActionLink("Add Movie", "AddMovie", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                @Html.ActionLink("Browse Movies", "BrowseMovies", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })
             </div>
         </li>
         <li>@Html.ActionLink("Customers", "BrowseCustomers", "Moderators", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
