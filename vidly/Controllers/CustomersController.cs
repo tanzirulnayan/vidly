@@ -166,7 +166,7 @@ namespace vidly.Controllers
 		{
 			if (GetSessionId() != 0)
 			{
-				var movies = context.Movies.ToList();
+				var movies = context.Movies.OrderByDescending(x => x.Id).ToList();
 				ViewBag.movies = movies;
 				return View(movies);
 			}
@@ -198,7 +198,7 @@ namespace vidly.Controllers
 				context.Movies.AddOrUpdate(m => m.Id, movie);
 				context.SaveChanges();
 
-				return RedirectToAction("BrowseMovies");
+				return RedirectToAction("CurrentBorrows");
 			}
 			else
 			{
