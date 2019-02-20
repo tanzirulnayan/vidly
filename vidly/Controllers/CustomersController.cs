@@ -25,7 +25,10 @@ namespace vidly.Controllers
 		{
 			if (GetSessionId() != 0)
 			{
-				return View();
+				//context.BorrowHistories.Where(x => x.CustomerId == sessionId)
+				//var movies = context.Movies.ToList();
+				var movies = context.Movies.Where(x => x.Year == 2018 || x.Year == 2019).ToList();
+				return View(movies);
 			}
 			else
 			{

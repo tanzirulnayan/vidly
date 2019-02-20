@@ -1,10 +1,62 @@
-﻿@model IEnumerable<vidly.Models.CustomerViewModel>
+﻿@model IEnumerable<vidlyDbContext.Entities.Movie>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
 }
 
-<h2>Index</h2>
-<h2>Welcome @Session["UserName"]</h2>
-
+<head>
+    <title>Browse Movies</title>
+</head>
+<h1 align="right">Welcome @Session["UserName"]</h1>
+<br />
+<h3>Latest Movies</h3>
+<table class="table">
+    <tr>
+        <th>
+            Thumbnail
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Genre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Year)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BorrowCount)
+        </th>
+        <th></th>
+    </tr>
+    <tbody id="myTable">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.ImagePath != null)
+                    {
+                        <img src="@Url.Content(item.ImagePath)" width="61" height="89" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BorrowCount)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "MovieDetails", new { id = item.Id }) |
+                    @Html.ActionLink("Borrow", "BorrowMovie", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

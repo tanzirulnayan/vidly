@@ -91,6 +91,7 @@ namespace vidly.Controllers
                 }
 
                 var movie = new Movie();
+                movie.Id = data.Movie.Id;
                 movie.Name = data.Movie.Name;
                 movie.Genre = data.Movie.Genre;
                 movie.Year = data.Movie.Year;
@@ -402,11 +403,7 @@ namespace vidly.Controllers
                 if (movie != null)
                 {
                     var movieData = new MovieViewModel();
-                    movieData.Movie.Id = movie.Id;
-                    movieData.Movie.Name = movie.Name;
-                    movieData.Movie.Genre = movie.Genre;
-                    movieData.Movie.Year = movie.Year;
-                    movieData.Movie.ImagePath = movie.ImagePath;
+                    movieData.Movie = movie;
                     return View(movieData);
                 }
                 else
@@ -427,7 +424,7 @@ namespace vidly.Controllers
             {
                 if (CreateOrUpdateMovie(data))
                 {
-                    return RedirectToAction("MovieDetails/"+data.Movie.Id);
+                    return RedirectToAction("BrowseMovies");
                 }
                 else
                 {
